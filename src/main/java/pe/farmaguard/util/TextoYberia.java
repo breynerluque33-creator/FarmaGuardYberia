@@ -3,9 +3,8 @@ package pe.farmaguard.util;
 import java.text.Normalizer;
 import java.util.Locale;
 
-public final class Texto {
-
-    private Texto() {
+public final class TextoYberia {
+    private TextoYberia() {
     }
 
     public static String normalizar(String texto) {
@@ -17,6 +16,6 @@ public final class Texto {
     }
 
     public static boolean iguales(String a, String b) {
-        return normalizar(a).equals(normalizar(b));
+        return SinonimosYberia.canonico(a).equals(SinonimosYberia.canonico(b));
     }
 }

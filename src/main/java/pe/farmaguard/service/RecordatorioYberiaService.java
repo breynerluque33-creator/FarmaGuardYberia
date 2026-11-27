@@ -4,10 +4,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.farmaguard.model.MedicamentoYberia;
-import pe.farmaguard.model.MomentoComida;
+import pe.farmaguard.model.MomentoComidaYberia;
 import pe.farmaguard.model.RecordatorioYberia;
 import pe.farmaguard.repository.RecordatorioYberiaRepository;
-import pe.farmaguard.util.Texto;
+import pe.farmaguard.util.TextoYberia;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,47 +16,53 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
 public class RecordatorioYberiaService {
-
-    public record TomaProgramada(RecordatorioYberia recordatorio, LocalDateTime cuando) {
+    public record TomaProgramadaYberia(RecordatorioYberia recordatorioYberia, LocalDateTime cuandoYberia) {
     }
 
-    public record ResultadoAutomatico(List<RecordatorioYberia> creados, List<String> omitidos) {
+    public record ResultadoAutomaticoYberia(List<RecordatorioYberia> creadosYberia, List<String> omitidosYberia) {
     }
 
-    public static final List<Integer> FRECUENCIAS = List.of(4, 6, 8, 12, 24);
-    public static final List<LocalTime> COMIDAS = List.of(LocalTime.of(8, 0), LocalTime.of(13, 0), LocalTime.of(20, 0));
-    public static final int DIAS_POR_DEFECTO = 5;
-    public static final int SEMANAS_POR_DEFECTO = 4;
+    public record PlanComidasYberia(LocalDateTime primeraYberia, List<LocalTime> horasYberia, String horasFijasYberia) {
+    }
 
-    private static final DateTimeFormatter HORA_ISO = DateTimeFormatter.ofPattern("HH:mm");
-    private static final Pattern DIAS = Pattern.compile("(\\d+)(?:\\s*a\\s*(\\d+))?\\s*dias");
-    private static final int MINUTOS_COMIDA = 30;
+    public static final List<Integer> FRECUENCIAS_YBERIA = List.of(4, 6, 8, 12, 24);
+    public static final List<LocalTime> COMIDAS_YBERIA = List.of(LocalTime.of(8, 0), LocalTime.of(13, 0), LocalTime.of(20, 0));
+    private static final List<LocalTime> DESAYUNO_YBERIA = List.of(LocalTime.of(8, 0));
+    private static final List<LocalTime> DESAYUNO_Y_CENA_YBERIA = List.of(LocalTime.of(8, 0), LocalTime.of(20, 0));
+    public static final int DIAS_POR_DEFECTO_YBERIA = 5;
+    public static final int SEMANAS_POR_DEFECTO_YBERIA = 4;
+
+    private static final DateTimeFormatter HORA_ISO_YBERIA = DateTimeFormatter.ofPattern("HH:mm");
+    private static final Pattern DIAS_YBERIA = Pattern.compile("(\\d+)(?:\\s*a\\s*(\\d+))?\\s*dias");
+    private static final int MINUTOS_COMIDA_YBERIA = 30;
 
     private final RecordatorioYberiaRepository repositorioYberia;
-    private final List<Runnable> oyentes = new CopyOnWriteArrayList<>();
+    private final List<Runnable> oyentesYberia = new CopyOnWriteArrayList<>();
 
     public RecordatorioYberiaService(RecordatorioYberiaRepository repositorioYberia) {
         this.repositorioYberia = repositorioYberia;
     }
 
     public List<RecordatorioYberia> listar() {
-        return repositorioYberia.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        return repositorioYberia.findAll(Sort.by(Sort.Direction.DESC, "idYberia"));
     }
 
     public void alCambiar(Runnable oyente) {
-        oyentes.add(oyente);
+        oyentesYberia.add(oyente);
     }
 
     @Transactional
@@ -94,85 +100,126 @@ public class RecordatorioYberiaService {
     }
 
     @Transactional
-    public ResultadoAutomatico agregarAutomaticos(List<ItemCompra> items, LocalDateTime ahora) {
-        List<RecordatorioYberia> creados = new ArrayList<>();
-        List<String> omitidos = new ArrayList<>();
-        for (ItemCompra item : items) {
-            MedicamentoYberia m = item.medicamento();
+    public ResultadoAutomaticoYberia agregarAutomaticos(List<ItemCompraYberia> items, LocalDateTime ahora) {
+        List<RecordatorioYberia> creadosYberia = new ArrayList<>();
+        List<String> omitidosYberia = new ArrayList<>();
+        for (ItemCompraYberia item : items) {
+            MedicamentoYberia m = item.medicamentoYberia();
             if (tieneRecordatorioVigente(m.getNombre(), ahora.toLocalDate())) {
-                omitidos.add(m.getNombre());
+                omitidosYberia.add(m.getNombre());
                 continue;
             }
-            RecordatorioYberia recordatorioYberia = sugerir(m, frecuenciaPara(item.unidadesDia()), diasSugeridos(m), ahora);
+            RecordatorioYberia recordatorioYberia = sugerir(m, frecuenciaPara(item.unidadesDiaYberia()), diasSugeridos(m), ahora);
             validar(recordatorioYberia);
-            creados.add(repositorioYberia.save(recordatorioYberia));
+            creadosYberia.add(repositorioYberia.save(recordatorioYberia));
         }
-        if (!creados.isEmpty()) {
+        if (!creadosYberia.isEmpty()) {
             notificar();
         }
-        return new ResultadoAutomatico(creados, omitidos);
+        return new ResultadoAutomaticoYberia(creadosYberia, omitidosYberia);
     }
 
     public boolean tieneRecordatorioVigente(String medicamentoYberia, LocalDate hoy) {
-        return listar().stream().anyMatch(r -> r.isActivo() && Texto.iguales(r.getMedicamento(), medicamentoYberia)
+        return listar().stream().anyMatch(r -> r.isActivo() && TextoYberia.iguales(r.getMedicamento(), medicamentoYberia)
                 && !fechaFin(r).isBefore(hoy));
     }
 
     public RecordatorioYberia sugerir(MedicamentoYberia m, int frecuenciaHoras, int dias, LocalDateTime ahora) {
-        MomentoComida momento = m.getMomentoComida();
-        LocalDateTime primera = primeraToma(momento, ahora);
-        String hora = primera.toLocalTime().format(HORA_ISO);
-        String fecha = primera.toLocalDate().toString();
+        MomentoComidaYberia momento = m.getMomentoComida();
         String notas = m.getDosisSugerida() == null ? "" : m.getDosisSugerida();
         if (esSemanal(m)) {
-            return RecordatorioYberia.cadaDias(m.getNombre(), 7, (SEMANAS_POR_DEFECTO - 1) * 7 + 1, momento, hora, fecha,
-                    notas);
+            LocalDateTime primeraYberia = primeraToma(momento, ahora);
+            return RecordatorioYberia.cadaDias(m.getNombre(), 7, (SEMANAS_POR_DEFECTO_YBERIA - 1) * 7 + 1, momento,
+                    primeraYberia.toLocalTime().format(HORA_ISO_YBERIA), primeraYberia.toLocalDate().toString(), notas);
         }
-        return new RecordatorioYberia(m.getNombre(), frecuenciaHoras, dias, momento, hora, fecha, notas);
+        Optional<PlanComidasYberia> plan = planConComidas(momento, frecuenciaHoras, ahora);
+        LocalDateTime primeraYberia = plan.map(PlanComidasYberia::primeraYberia).orElseGet(() -> primeraToma(momento, ahora));
+        return new RecordatorioYberia(m.getNombre(), frecuenciaHoras, dias, momento,
+                primeraYberia.toLocalTime().format(HORA_ISO_YBERIA), primeraYberia.toLocalDate().toString(), notas)
+                .conHorasFijas(plan.map(PlanComidasYberia::horasFijasYberia).orElse(null));
+    }
+
+    public static Optional<PlanComidasYberia> planConComidas(MomentoComidaYberia momento, int frecuenciaHoras, LocalDateTime ahora) {
+        if (momento == null || momento == MomentoComidaYberia.INDIFERENTE) {
+            return Optional.empty();
+        }
+        List<LocalTime> comidas = switch (frecuenciaHoras) {
+            case 24 -> DESAYUNO_YBERIA;
+            case 12 -> DESAYUNO_Y_CENA_YBERIA;
+            case 8 -> COMIDAS_YBERIA;
+            default -> null;
+        };
+        if (comidas == null) {
+            return Optional.empty();
+        }
+        long desfase = desfase(momento);
+        List<LocalTime> horasYberia = comidas.stream().map(c -> c.plusMinutes(desfase)).toList();
+        LocalDateTime minimo = ahora.truncatedTo(ChronoUnit.MINUTES).plusMinutes(1);
+        LocalDate hoy = ahora.toLocalDate();
+        LocalDateTime primeraYberia = Stream.of(hoy, hoy.plusDays(1))
+                .flatMap(dia -> horasYberia.stream().map(dia::atTime))
+                .filter(t -> !t.isBefore(minimo))
+                .findFirst()
+                .orElseThrow();
+        String fijas = frecuenciaHoras == 8
+                ? horasYberia.stream().map(h -> h.format(HORA_ISO_YBERIA)).collect(Collectors.joining(","))
+                : null;
+        return Optional.of(new PlanComidasYberia(primeraYberia, horasYberia, fijas));
+    }
+
+    private static long desfase(MomentoComidaYberia momento) {
+        return switch (momento) {
+            case ANTES -> -MINUTOS_COMIDA_YBERIA;
+            case DESPUES -> MINUTOS_COMIDA_YBERIA;
+            default -> 0;
+        };
     }
 
     public static boolean esSemanal(MedicamentoYberia m) {
-        return Texto.normalizar(m.getDosisSugerida()).contains("vez por semana");
+        return TextoYberia.normalizar(m.getDosisSugerida()).contains("vez por semana");
     }
 
     public static int frecuenciaPara(int unidadesDia) {
-        int horas = (int) Math.ceil(24.0 / Math.max(1, unidadesDia));
-        return FRECUENCIAS.stream().filter(h -> h >= horas).findFirst().orElse(24);
+        int horasYberia = (int) Math.ceil(24.0 / Math.max(1, unidadesDia));
+        return FRECUENCIAS_YBERIA.stream().filter(h -> h >= horasYberia).findFirst().orElse(24);
     }
 
     public static int diasSugeridos(MedicamentoYberia m) {
-        Matcher matcher = DIAS.matcher(Texto.normalizar(m.getDosisSugerida()));
+        Matcher matcher = DIAS_YBERIA.matcher(TextoYberia.normalizar(m.getDosisSugerida()));
         int dias = 0;
         while (matcher.find()) {
             dias = Math.max(dias, Integer.parseInt(matcher.group(2) != null ? matcher.group(2) : matcher.group(1)));
         }
-        return dias >= 1 && dias <= 365 ? dias : DIAS_POR_DEFECTO;
+        return dias >= 1 && dias <= 365 ? dias : DIAS_POR_DEFECTO_YBERIA;
     }
 
-    public static LocalDateTime primeraToma(MomentoComida momento, LocalDateTime ahora) {
+    public static LocalDateTime primeraToma(MomentoComidaYberia momento, LocalDateTime ahora) {
         LocalDateTime minimo = ahora.truncatedTo(ChronoUnit.MINUTES).plusMinutes(1);
-        if (momento == null || momento == MomentoComida.INDIFERENTE) {
+        if (momento == null || momento == MomentoComidaYberia.INDIFERENTE) {
             int resto = minimo.getMinute() % 5;
             return resto == 0 ? minimo : minimo.plusMinutes(5L - resto);
         }
-        long desfase = switch (momento) {
-            case ANTES -> -MINUTOS_COMIDA;
-            case DESPUES -> MINUTOS_COMIDA;
-            default -> 0;
-        };
+        long desfase = desfase(momento);
         LocalDate hoy = ahora.toLocalDate();
         return Stream.of(hoy, hoy.plusDays(1))
-                .flatMap(dia -> COMIDAS.stream().map(comida -> dia.atTime(comida).plusMinutes(desfase)))
+                .flatMap(dia -> COMIDAS_YBERIA.stream().map(comida -> dia.atTime(comida).plusMinutes(desfase)))
                 .filter(t -> !t.isBefore(minimo))
                 .findFirst()
                 .orElseThrow();
     }
 
     private void notificar() {
-        oyentes.forEach(Runnable::run);
+        oyentesYberia.forEach(Runnable::run);
     }
 
     public List<LocalTime> horarios(RecordatorioYberia r) {
+        if (r.tieneHorasFijas()) {
+            return Arrays.stream(r.getHorasFijas().split(","))
+                    .map(String::trim)
+                    .map(LocalTime::parse)
+                    .sorted()
+                    .toList();
+        }
         LocalTime inicio = LocalTime.parse(r.getHoraInicio());
         int tomasPorDia = Math.max(1, 24 / r.getFrecuenciaHoras());
         return IntStream.range(0, tomasPorDia)
@@ -217,10 +264,10 @@ public class RecordatorioYberiaService {
                 .findFirst();
     }
 
-    public Optional<TomaProgramada> proximaToma(LocalDateTime desde) {
+    public Optional<TomaProgramadaYberia> proximaToma(LocalDateTime desde) {
         return listar().stream()
-                .flatMap(r -> proximaToma(r, desde).map(cuando -> new TomaProgramada(r, cuando)).stream())
-                .min(Comparator.comparing(TomaProgramada::cuando));
+                .flatMap(r -> proximaToma(r, desde).map(cuandoYberia -> new TomaProgramadaYberia(r, cuandoYberia)).stream())
+                .min(Comparator.comparing(TomaProgramadaYberia::cuandoYberia));
     }
 
     private static void validar(RecordatorioYberia r) {
@@ -239,6 +286,9 @@ public class RecordatorioYberiaService {
         try {
             LocalTime.parse(r.getHoraInicio());
             LocalDate.parse(r.getFechaInicio());
+            if (r.tieneHorasFijas()) {
+                Arrays.stream(r.getHorasFijas().split(",")).map(String::trim).forEach(LocalTime::parse);
+            }
         } catch (DateTimeParseException | NullPointerException e) {
             throw new IllegalArgumentException("La fecha u hora de inicio no es válida.");
         }

@@ -1,6 +1,6 @@
 package pe.farmaguard.ui;
 
-import pe.farmaguard.model.NivelRiesgo;
+import pe.farmaguard.model.NivelRiesgoYberia;
 
 import javax.swing.Icon;
 import java.awt.BasicStroke;
@@ -18,14 +18,13 @@ import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.function.Supplier;
 
-public final class Iconos {
-
+public final class IconosYberia {
     @FunctionalInterface
-    private interface Pintor {
+    private interface PintorYberia {
         void pintar(Graphics2D g, float t);
     }
 
-    private record Vectorial(int tam, Pintor pintor) implements Icon {
+    private record VectorialYberia(int tamYberia, PintorYberia pintorYberia) implements Icon {
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -33,32 +32,32 @@ public final class Iconos {
             g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
             g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             g2.translate(x, y);
-            pintor.pintar(g2, tam);
+            pintorYberia.pintar(g2, tamYberia);
             g2.dispose();
         }
 
         @Override
         public int getIconWidth() {
-            return tam;
+            return tamYberia;
         }
 
         @Override
         public int getIconHeight() {
-            return tam;
+            return tamYberia;
         }
     }
 
-    private Iconos() {
+    private IconosYberia() {
     }
 
     private static BasicStroke trazo(float ancho) {
         return new BasicStroke(ancho, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     }
 
-    public static Icon nivel(NivelRiesgo nivel, int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.colorNivel(nivel));
-            if (nivel == NivelRiesgo.PRECAUCION) {
+    public static Icon nivel(NivelRiesgoYberia nivel, int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.colorNivel(nivel));
+            if (nivel == NivelRiesgoYberia.PRECAUCION) {
                 Path2D triangulo = new Path2D.Float();
                 triangulo.moveTo(t * 0.5, t * 0.1);
                 triangulo.lineTo(t * 0.93, t * 0.86);
@@ -93,18 +92,18 @@ public final class Iconos {
         });
     }
 
-    public static Icon buscar(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.textoSecundario());
+    public static Icon buscar(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.textoSecundario());
             g.setStroke(trazo(Math.max(1.5f, t * 0.1f)));
             g.draw(new Ellipse2D.Float(t * 0.12f, t * 0.12f, t * 0.54f, t * 0.54f));
             g.draw(new Line2D.Float(t * 0.6f, t * 0.6f, t * 0.86f, t * 0.86f));
         });
     }
 
-    public static Icon eliminar(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.textoSecundario());
+    public static Icon eliminar(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.textoSecundario());
             g.setStroke(trazo(Math.max(1.4f, t * 0.08f)));
             g.draw(new Line2D.Float(t * 0.16f, t * 0.27f, t * 0.84f, t * 0.27f));
             Path2D asa = new Path2D.Float();
@@ -124,8 +123,8 @@ public final class Iconos {
         });
     }
 
-    public static Icon mas(int tam, Supplier<Color> color) {
-        return new Vectorial(tam, (g, t) -> {
+    public static Icon mas(int tamYberia, Supplier<Color> color) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
             g.setColor(color.get());
             g.setStroke(trazo(Math.max(1.6f, t * 0.12f)));
             g.draw(new Line2D.Float(t * 0.5f, t * 0.2f, t * 0.5f, t * 0.8f));
@@ -133,19 +132,19 @@ public final class Iconos {
         });
     }
 
-    public static Icon menos(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.textoPrincipal());
+    public static Icon menos(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.textoPrincipal());
             g.setStroke(trazo(Math.max(1.6f, t * 0.12f)));
             g.draw(new Line2D.Float(t * 0.2f, t * 0.5f, t * 0.8f, t * 0.5f));
         });
     }
 
-    public static Icon check(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.acentoSuave());
+    public static Icon check(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.acentoSuave());
             g.fill(new Ellipse2D.Float(0, 0, t, t));
-            g.setColor(Estilos.acento());
+            g.setColor(EstilosYberia.acento());
             g.setStroke(trazo(Math.max(1.5f, t * 0.11f)));
             Path2D check = new Path2D.Float();
             check.moveTo(t * 0.29, t * 0.52);
@@ -155,9 +154,9 @@ public final class Iconos {
         });
     }
 
-    public static Icon reloj(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.acento());
+    public static Icon reloj(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.acento());
             g.setStroke(trazo(Math.max(1.6f, t * 0.09f)));
             g.draw(new Ellipse2D.Float(t * 0.08f, t * 0.08f, t * 0.84f, t * 0.84f));
             Path2D agujas = new Path2D.Float();
@@ -168,9 +167,9 @@ public final class Iconos {
         });
     }
 
-    public static Icon logo(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.acento());
+    public static Icon logo(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.acento());
             g.fill(new RoundRectangle2D.Float(0, 0, t, t, t * 0.38f, t * 0.38f));
             g.setColor(Color.WHITE);
             float grosor = t * 0.2f;
@@ -182,10 +181,10 @@ public final class Iconos {
         });
     }
 
-    public static Icon tema(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.textoSecundario());
-            if (Estilos.esOscuro()) {
+    public static Icon tema(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.textoSecundario());
+            if (EstilosYberia.esOscuro()) {
                 g.fill(new Ellipse2D.Float(t * 0.3f, t * 0.3f, t * 0.4f, t * 0.4f));
                 g.setStroke(trazo(Math.max(1.5f, t * 0.08f)));
                 for (int i = 0; i < 8; i++) {
@@ -204,9 +203,9 @@ public final class Iconos {
         });
     }
 
-    public static Icon editar(int tam) {
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.textoSecundario());
+    public static Icon editar(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.textoSecundario());
             g.setStroke(trazo(Math.max(1.4f, t * 0.08f)));
             Path2D lapiz = new Path2D.Float();
             lapiz.moveTo(t * 0.16, t * 0.84);
@@ -220,12 +219,37 @@ public final class Iconos {
         });
     }
 
-    public static Icon avatar(String texto, int tam) {
+    public static Icon info(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.textoSecundario());
+            g.setStroke(trazo(Math.max(1.5f, t * 0.08f)));
+            g.draw(new Ellipse2D.Float(t * 0.1f, t * 0.1f, t * 0.8f, t * 0.8f));
+            g.setStroke(trazo(Math.max(1.7f, t * 0.1f)));
+            g.draw(new Line2D.Float(t * 0.5f, t * 0.46f, t * 0.5f, t * 0.7f));
+            float punto = Math.max(2.2f, t * 0.12f);
+            g.fill(new Ellipse2D.Float(t * 0.5f - punto / 2, t * 0.27f, punto, punto));
+        });
+    }
+
+    public static Icon ayuda(int tamYberia) {
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.textoSecundario());
+            g.setStroke(trazo(Math.max(1.5f, t * 0.08f)));
+            g.draw(new Ellipse2D.Float(t * 0.1f, t * 0.1f, t * 0.8f, t * 0.8f));
+            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, Math.round(t * 0.5f)));
+            FontMetrics fm = g.getFontMetrics();
+            float x = (t - fm.stringWidth("?")) / 2f;
+            float y = (t - fm.getHeight()) / 2f + fm.getAscent();
+            g.drawString("?", x, y);
+        });
+    }
+
+    public static Icon avatar(String texto, int tamYberia) {
         String inicial = texto == null || texto.isBlank() ? "?" : texto.substring(0, 1).toUpperCase();
-        return new Vectorial(tam, (g, t) -> {
-            g.setColor(Estilos.acentoSuave());
+        return new VectorialYberia(tamYberia, (g, t) -> {
+            g.setColor(EstilosYberia.acentoSuave());
             g.fill(new Ellipse2D.Float(0, 0, t, t));
-            g.setColor(Estilos.acento());
+            g.setColor(EstilosYberia.acento());
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, Math.round(t * 0.44f)));
             FontMetrics fm = g.getFontMetrics();
             float x = (t - fm.stringWidth(inicial)) / 2f;

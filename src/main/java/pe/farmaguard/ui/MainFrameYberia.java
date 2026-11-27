@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -25,10 +26,9 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class MainFrameYberia extends JFrame {
-
-    private static final String ANALISIS = "Analizar compra";
-    private static final String CATALOGO = "Medicamentos";
-    private static final String RECORDATORIOS = "Recordatorios";
+    private static final String ANALISIS_YBERIA = "Analizar compra";
+    private static final String CATALOGO_YBERIA = "Medicamentos";
+    private static final String RECORDATORIOS_YBERIA = "Recordatorios";
 
     public MainFrameYberia(MedicamentoYberiaService medicamentoYberiaService,
                      CompatibilidadYberiaService compatibilidadYberiaService,
@@ -38,24 +38,24 @@ public class MainFrameYberia extends JFrame {
         setIconImages(iconosVentana());
 
         CardLayout paginas = new CardLayout();
-        JPanel contenido = Estilos.transparente(paginas);
-        Segmentado<String> navegacion = new Segmentado<>(List.of(ANALISIS, CATALOGO, RECORDATORIOS), s -> s,
+        JPanel contenido = EstilosYberia.transparente(paginas);
+        SegmentadoYberia<String> navegacion = new SegmentadoYberia<>(List.of(ANALISIS_YBERIA, CATALOGO_YBERIA, RECORDATORIOS_YBERIA), s -> s,
                 new Insets(7, 20, 7, 20));
         navegacion.alCambiar(pagina -> paginas.show(contenido, pagina));
-        navegacion.setSeleccion(ANALISIS);
+        navegacion.setSeleccion(ANALISIS_YBERIA);
         Runnable irARecordatorios = () -> {
-            navegacion.setSeleccion(RECORDATORIOS);
-            paginas.show(contenido, RECORDATORIOS);
+            navegacion.setSeleccion(RECORDATORIOS_YBERIA);
+            paginas.show(contenido, RECORDATORIOS_YBERIA);
         };
 
-        AnalisisPanel analisis = new AnalisisPanel(medicamentoYberiaService, compatibilidadYberiaService,
+        AnalisisPanelYberia analisis = new AnalisisPanelYberia(medicamentoYberiaService, compatibilidadYberiaService,
                 recordatorioYberiaService, irARecordatorios);
-        contenido.add(analisis, ANALISIS);
-        contenido.add(new CatalogoPanel(medicamentoYberiaService, compatibilidadYberiaService), CATALOGO);
-        contenido.add(new RecordatoriosPanel(recordatorioYberiaService, medicamentoYberiaService), RECORDATORIOS);
+        contenido.add(analisis, ANALISIS_YBERIA);
+        contenido.add(new CatalogoPanelYberia(medicamentoYberiaService, compatibilidadYberiaService), CATALOGO_YBERIA);
+        contenido.add(new RecordatoriosPanelYberia(recordatorioYberiaService, medicamentoYberiaService), RECORDATORIOS_YBERIA);
 
         JPanel raiz = new JPanel(new BorderLayout());
-        raiz.add(crearCabecera(navegacion), BorderLayout.NORTH);
+        raiz.add(crearCabecera(navegacion, this), BorderLayout.NORTH);
         raiz.add(contenido, BorderLayout.CENTER);
         raiz.add(crearPie(), BorderLayout.SOUTH);
         setContentPane(raiz);
@@ -67,31 +67,38 @@ public class MainFrameYberia extends JFrame {
             @Override
             public void windowOpened(WindowEvent e) {
                 analisis.enfocarBuscador();
+                SwingUtilities.invokeLater(() -> AyudaYberia.mostrarGuiaSiEsPrimeraVez(MainFrameYberia.this));
             }
         });
     }
 
-    private static JPanel crearCabecera(Segmentado<String> navegacion) {
-        JLabel logo = new JLabel(Iconos.logo(38));
-        JPanel textos = Estilos.transparente(new GridLayout(0, 1, 0, 0));
-        textos.add(Estilos.etiqueta("FarmaGuard", "h2"));
-        textos.add(Estilos.etiqueta("Compras seguras en farmacia", "small", Estilos::textoSecundario));
-        JPanel marca = Estilos.transparente(new BorderLayout(10, 0));
+    private static JPanel crearCabecera(SegmentadoYberia<String> navegacion, JFrame ventana) {
+        JLabel logo = new JLabel(IconosYberia.logo(38));
+        JPanel textos = EstilosYberia.transparente(new GridLayout(0, 1, 0, 0));
+        textos.add(EstilosYberia.etiqueta("FarmaGuard", "h2"));
+        textos.add(EstilosYberia.etiqueta("Compras seguras en farmacia", "small", EstilosYberia::textoSecundario));
+        JPanel marca = EstilosYberia.transparente(new BorderLayout(10, 0));
         marca.add(logo, BorderLayout.WEST);
         marca.add(textos, BorderLayout.CENTER);
 
-        JPanel centroNavegacion = Estilos.transparente(new GridBagLayout());
+        JPanel centroNavegacion = EstilosYberia.transparente(new GridBagLayout());
         centroNavegacion.add(navegacion);
 
-        JButton tema = Estilos.botonIcono(Iconos.tema(20), "Cambiar entre tema claro y oscuro");
-        tema.addActionListener(e -> Estilos.alternarTema());
-        JPanel derecha = Estilos.transparente(new GridBagLayout());
+        JButton tema = EstilosYberia.botonIcono(IconosYberia.tema(20), "Cambiar entre tema claro y oscuro");
+        tema.addActionListener(e -> EstilosYberia.alternarTema());
+        JButton guia = EstilosYberia.botonIcono(IconosYberia.ayuda(20), "Guía de uso");
+        guia.addActionListener(e -> AyudaYberia.mostrarGuia(ventana));
+        JButton info = EstilosYberia.botonIcono(IconosYberia.info(20), "Aviso importante: FarmaGuard no reemplaza a un médico");
+        info.addActionListener(e -> AyudaYberia.mostrarAviso(ventana));
+        JPanel derecha = EstilosYberia.transparente(new GridBagLayout());
+        derecha.add(guia);
         derecha.add(tema);
-        JPanel contenedorDerecha = Estilos.transparente(new BorderLayout());
+        derecha.add(info);
+        JPanel contenedorDerecha = EstilosYberia.transparente(new BorderLayout());
         contenedorDerecha.add(derecha, BorderLayout.EAST);
         contenedorDerecha.setPreferredSize(marca.getPreferredSize());
 
-        JPanel cabecera = Estilos.transparente(new BorderLayout(16, 0));
+        JPanel cabecera = EstilosYberia.transparente(new BorderLayout(16, 0));
         cabecera.setBorder(BorderFactory.createEmptyBorder(14, 26, 14, 26));
         cabecera.add(marca, BorderLayout.WEST);
         cabecera.add(centroNavegacion, BorderLayout.CENTER);
@@ -100,9 +107,9 @@ public class MainFrameYberia extends JFrame {
     }
 
     private static JPanel crearPie() {
-        JLabel aviso = Estilos.etiqueta(Estilos.AVISO_LEGAL, "small", Estilos::textoSecundario);
+        JLabel aviso = EstilosYberia.etiqueta(EstilosYberia.AVISO_LEGAL_YBERIA, "small", EstilosYberia::textoSecundario);
         aviso.setHorizontalAlignment(SwingConstants.CENTER);
-        JPanel pie = Estilos.transparente(new BorderLayout());
+        JPanel pie = EstilosYberia.transparente(new BorderLayout());
         pie.setBorder(BorderFactory.createEmptyBorder(0, 24, 10, 24));
         pie.add(aviso, BorderLayout.CENTER);
         return pie;
@@ -113,7 +120,7 @@ public class MainFrameYberia extends JFrame {
                 .map(tam -> {
                     BufferedImage imagen = new BufferedImage(tam, tam, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D g = imagen.createGraphics();
-                    Iconos.logo(tam).paintIcon(null, g, 0, 0);
+                    IconosYberia.logo(tam).paintIcon(null, g, 0, 0);
                     g.dispose();
                     return (Image) imagen;
                 })

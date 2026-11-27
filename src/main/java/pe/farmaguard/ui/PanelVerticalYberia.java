@@ -8,9 +8,8 @@ import javax.swing.Scrollable;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-public class PanelVertical extends JPanel implements Scrollable {
-
-    public PanelVertical() {
+public class PanelVerticalYberia extends JPanel implements Scrollable {
+    public PanelVerticalYberia() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
     }

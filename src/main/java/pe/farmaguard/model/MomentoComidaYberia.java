@@ -1,23 +1,23 @@
 package pe.farmaguard.model;
 
-public enum MomentoComida {
+public enum MomentoComidaYberia {
     ANTES("Antes de comer"),
     DURANTE("Durante la comida"),
     DESPUES("Después de comer"),
     INDIFERENTE("Con o sin comida");
 
-    private final String etiqueta;
+    private final String etiquetaYberia;
 
-    MomentoComida(String etiqueta) {
-        this.etiqueta = etiqueta;
+    MomentoComidaYberia(String etiquetaYberia) {
+        this.etiquetaYberia = etiquetaYberia;
     }
 
     public String getEtiqueta() {
-        return etiqueta;
+        return etiquetaYberia;
     }
 
     @Override
     public String toString() {
-        return etiqueta;
+        return etiquetaYberia;
     }
 }

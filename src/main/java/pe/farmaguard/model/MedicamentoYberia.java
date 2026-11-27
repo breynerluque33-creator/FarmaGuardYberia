@@ -16,54 +16,56 @@ import java.util.Objects;
 @Entity
 @Table(name = "medicamentos")
 public class MedicamentoYberia {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id")
+    private Long idYberia;
 
-    @Column(nullable = false, unique = true)
-    private String nombre;
+    @Column(name = "nombre", nullable = false, unique = true)
+    private String nombreYberia;
 
     @Column(name = "principio_activo", nullable = false)
-    private String principioActivo;
+    private String principioActivoYberia;
 
-    @Column(nullable = false)
-    private String categoria;
+    @Column(name = "categoria", nullable = false)
+    private String categoriaYberia;
 
-    private String concentracion;
+    @Column(name = "concentracion")
+    private String concentracionYberia;
 
     @Column(name = "dosis_mg")
-    private Double dosisMg;
+    private Double dosisMgYberia;
 
     @Column(name = "dosis_max_unidad_mg")
-    private Double dosisMaxUnidadMg;
+    private Double dosisMaxUnidadMgYberia;
 
     @Column(name = "dosis_max_diaria_mg")
-    private Double dosisMaxDiariaMg;
+    private Double dosisMaxDiariaMgYberia;
 
     @Column(name = "unidades_dia_habitual", nullable = false)
-    private Integer unidadesDiaHabitual;
+    private Integer unidadesDiaHabitualYberia;
 
     @Column(name = "dosis_sugerida")
-    private String dosisSugerida;
+    private String dosisSugeridaYberia;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "momento_comida", nullable = false)
-    private MomentoComida momentoComida;
+    private MomentoComidaYberia momentoComidaYberia;
 
     @Column(name = "requiere_receta", nullable = false)
-    private boolean requiereReceta;
+    private boolean requiereRecetaYberia;
 
-    @Column(nullable = false)
-    private String descripcion;
+    @Column(name = "descripcion", nullable = false)
+    private String descripcionYberia;
 
-    private String consejos;
+    @Column(name = "consejos")
+    private String consejosYberia;
 
     protected MedicamentoYberia() {
     }
 
     public List<String> getPrincipios() {
-        return Arrays.stream(principioActivo.split("\\+"))
+        return Arrays.stream(principioActivoYberia.split("\\+"))
                 .map(String::trim)
                 .filter(p -> !p.isEmpty())
                 .toList();
@@ -74,73 +76,73 @@ public class MedicamentoYberia {
     }
 
     public Long getId() {
-        return id;
+        return idYberia;
     }
 
     public String getNombre() {
-        return nombre;
+        return nombreYberia;
     }
 
     public String getPrincipioActivo() {
-        return principioActivo;
+        return principioActivoYberia;
     }
 
     public String getCategoria() {
-        return categoria;
+        return categoriaYberia;
     }
 
     public String getConcentracion() {
-        return concentracion;
+        return concentracionYberia;
     }
 
     public Double getDosisMg() {
-        return dosisMg;
+        return dosisMgYberia;
     }
 
     public Double getDosisMaxUnidadMg() {
-        return dosisMaxUnidadMg;
+        return dosisMaxUnidadMgYberia;
     }
 
     public Double getDosisMaxDiariaMg() {
-        return dosisMaxDiariaMg;
+        return dosisMaxDiariaMgYberia;
     }
 
     public int getUnidadesDiaHabitual() {
-        return unidadesDiaHabitual == null ? 1 : unidadesDiaHabitual;
+        return unidadesDiaHabitualYberia == null ? 1 : unidadesDiaHabitualYberia;
     }
 
     public String getDosisSugerida() {
-        return dosisSugerida;
+        return dosisSugeridaYberia;
     }
 
-    public MomentoComida getMomentoComida() {
-        return momentoComida == null ? MomentoComida.INDIFERENTE : momentoComida;
+    public MomentoComidaYberia getMomentoComida() {
+        return momentoComidaYberia == null ? MomentoComidaYberia.INDIFERENTE : momentoComidaYberia;
     }
 
     public boolean isRequiereReceta() {
-        return requiereReceta;
+        return requiereRecetaYberia;
     }
 
     public String getDescripcion() {
-        return descripcion;
+        return descripcionYberia;
     }
 
     public String getConsejos() {
-        return consejos;
+        return consejosYberia;
     }
 
     @Override
     public boolean equals(Object o) {
-        return this == o || (o instanceof MedicamentoYberia otro && id != null && Objects.equals(id, otro.id));
+        return this == o || (o instanceof MedicamentoYberia otro && idYberia != null && Objects.equals(idYberia, otro.idYberia));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(idYberia);
     }
 
     @Override
     public String toString() {
-        return nombre;
+        return nombreYberia;
     }
 }

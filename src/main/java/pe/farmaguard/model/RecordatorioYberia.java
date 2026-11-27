@@ -12,117 +12,135 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "recordatorios")
 public class RecordatorioYberia {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id")
+    private Long idYberia;
 
-    @Column(nullable = false)
-    private String medicamento;
+    @Column(name = "medicamento", nullable = false)
+    private String medicamentoYberia;
 
     @Column(name = "frecuencia_horas", nullable = false)
-    private int frecuenciaHoras;
+    private int frecuenciaHorasYberia;
 
     @Column(name = "duracion_dias", nullable = false)
-    private int duracionDias;
+    private int duracionDiasYberia;
 
     @Column(name = "intervalo_dias", nullable = false)
-    private int intervaloDias = 1;
+    private int intervaloDiasYberia = 1;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "momento_comida", nullable = false)
-    private MomentoComida momentoComida;
+    private MomentoComidaYberia momentoComidaYberia;
 
     @Column(name = "hora_inicio", nullable = false)
-    private String horaInicio;
+    private String horaInicioYberia;
 
     @Column(name = "fecha_inicio", nullable = false)
-    private String fechaInicio;
+    private String fechaInicioYberia;
 
-    private String notas;
+    @Column(name = "notas")
+    private String notasYberia;
 
-    @Column(nullable = false)
-    private boolean activo = true;
+    @Column(name = "horas_fijas")
+    private String horasFijasYberia;
+
+    @Column(name = "activo", nullable = false)
+    private boolean activoYberia = true;
 
     protected RecordatorioYberia() {
     }
 
-    public RecordatorioYberia(String medicamento, int frecuenciaHoras, int duracionDias, MomentoComida momentoComida,
-                        String horaInicio, String fechaInicio, String notas) {
-        this.medicamento = medicamento;
-        this.frecuenciaHoras = frecuenciaHoras;
-        this.duracionDias = duracionDias;
-        this.momentoComida = momentoComida;
-        this.horaInicio = horaInicio;
-        this.fechaInicio = fechaInicio;
-        this.notas = notas;
+    public RecordatorioYberia(String medicamentoYberia, int frecuenciaHorasYberia, int duracionDiasYberia, MomentoComidaYberia momentoComidaYberia,
+                        String horaInicioYberia, String fechaInicioYberia, String notasYberia) {
+        this.medicamentoYberia = medicamentoYberia;
+        this.frecuenciaHorasYberia = frecuenciaHorasYberia;
+        this.duracionDiasYberia = duracionDiasYberia;
+        this.momentoComidaYberia = momentoComidaYberia;
+        this.horaInicioYberia = horaInicioYberia;
+        this.fechaInicioYberia = fechaInicioYberia;
+        this.notasYberia = notasYberia;
     }
 
-    public static RecordatorioYberia cadaDias(String medicamento, int intervaloDias, int duracionDias,
-                                        MomentoComida momentoComida, String horaInicio, String fechaInicio,
-                                        String notas) {
-        RecordatorioYberia recordatorioYberia = new RecordatorioYberia(medicamento, 24, duracionDias, momentoComida,
-                horaInicio, fechaInicio, notas);
-        recordatorioYberia.intervaloDias = intervaloDias;
+    public static RecordatorioYberia cadaDias(String medicamentoYberia, int intervaloDiasYberia, int duracionDiasYberia,
+                                        MomentoComidaYberia momentoComidaYberia, String horaInicioYberia, String fechaInicioYberia,
+                                        String notasYberia) {
+        RecordatorioYberia recordatorioYberia = new RecordatorioYberia(medicamentoYberia, 24, duracionDiasYberia, momentoComidaYberia,
+                horaInicioYberia, fechaInicioYberia, notasYberia);
+        recordatorioYberia.intervaloDiasYberia = intervaloDiasYberia;
         return recordatorioYberia;
     }
 
     public void actualizarDesde(RecordatorioYberia datos) {
-        this.medicamento = datos.medicamento;
-        this.frecuenciaHoras = datos.frecuenciaHoras;
-        this.duracionDias = datos.duracionDias;
-        this.intervaloDias = datos.intervaloDias;
-        this.momentoComida = datos.momentoComida;
-        this.horaInicio = datos.horaInicio;
-        this.fechaInicio = datos.fechaInicio;
-        this.notas = datos.notas;
+        this.medicamentoYberia = datos.medicamentoYberia;
+        this.frecuenciaHorasYberia = datos.frecuenciaHorasYberia;
+        this.duracionDiasYberia = datos.duracionDiasYberia;
+        this.intervaloDiasYberia = datos.intervaloDiasYberia;
+        this.momentoComidaYberia = datos.momentoComidaYberia;
+        this.horaInicioYberia = datos.horaInicioYberia;
+        this.fechaInicioYberia = datos.fechaInicioYberia;
+        this.notasYberia = datos.notasYberia;
+        this.horasFijasYberia = datos.horasFijasYberia;
+    }
+
+    public RecordatorioYberia conHorasFijas(String horasFijasYberia) {
+        this.horasFijasYberia = horasFijasYberia == null || horasFijasYberia.isBlank() ? null : horasFijasYberia;
+        return this;
+    }
+
+    public String getHorasFijas() {
+        return horasFijasYberia;
+    }
+
+    public boolean tieneHorasFijas() {
+        return horasFijasYberia != null && !horasFijasYberia.isBlank();
     }
 
     public Long getId() {
-        return id;
+        return idYberia;
     }
 
     public String getMedicamento() {
-        return medicamento;
+        return medicamentoYberia;
     }
 
     public int getFrecuenciaHoras() {
-        return frecuenciaHoras;
+        return frecuenciaHorasYberia;
     }
 
     public int getDuracionDias() {
-        return duracionDias;
+        return duracionDiasYberia;
     }
 
     public int getIntervaloDias() {
-        return intervaloDias;
+        return intervaloDiasYberia;
     }
 
     public boolean isSemanal() {
-        return intervaloDias == 7;
+        return intervaloDiasYberia == 7;
     }
 
-    public MomentoComida getMomentoComida() {
-        return momentoComida;
+    public MomentoComidaYberia getMomentoComida() {
+        return momentoComidaYberia;
     }
 
     public String getHoraInicio() {
-        return horaInicio;
+        return horaInicioYberia;
     }
 
     public String getFechaInicio() {
-        return fechaInicio;
+        return fechaInicioYberia;
     }
 
     public String getNotas() {
-        return notas;
+        return notasYberia;
     }
 
     public boolean isActivo() {
-        return activo;
+        return activoYberia;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setActivo(boolean activoYberia) {
+        this.activoYberia = activoYberia;
     }
 }

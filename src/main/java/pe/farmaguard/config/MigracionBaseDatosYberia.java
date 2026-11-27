@@ -10,20 +10,20 @@ import java.util.List;
 
 @Component
 @DependsOnDatabaseInitialization
-public class MigracionBaseDatos {
+public class MigracionBaseDatosYberia {
+    private static final Logger LOG_YBERIA = LoggerFactory.getLogger(MigracionBaseDatosYberia.class);
 
-    private static final Logger LOG = LoggerFactory.getLogger(MigracionBaseDatos.class);
-
-    public MigracionBaseDatos(JdbcTemplate jdbc) {
+    public MigracionBaseDatosYberia(JdbcTemplate jdbc) {
         agregarColumnaSiFalta(jdbc, "recordatorios", "intervalo_dias",
                 "INTEGER NOT NULL DEFAULT 1 CHECK (intervalo_dias BETWEEN 1 AND 30)");
+        agregarColumnaSiFalta(jdbc, "recordatorios", "horas_fijas", "TEXT");
     }
 
     private static void agregarColumnaSiFalta(JdbcTemplate jdbc, String tabla, String columna, String definicion) {
         List<String> columnas = jdbc.query("PRAGMA table_info(" + tabla + ")", (fila, i) -> fila.getString("name"));
         if (!columnas.contains(columna)) {
             jdbc.execute("ALTER TABLE " + tabla + " ADD COLUMN " + columna + " " + definicion);
-            LOG.info("Base de datos actualizada: columna {}.{} agregada", tabla, columna);
+            LOG_YBERIA.info("Base de datos actualizada: columna {}.{} agregada", tabla, columna);
         }
     }
 }

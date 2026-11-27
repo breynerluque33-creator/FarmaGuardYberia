@@ -12,9 +12,8 @@ import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
-public class BotonPrimario extends JButton {
-
-    public BotonPrimario(String texto, Icon icono) {
+public class BotonPrimarioYberia extends JButton {
+    public BotonPrimarioYberia(String texto, Icon icono) {
         super(texto, icono);
         setContentAreaFilled(false);
         setBorderPainted(false);
@@ -34,10 +33,10 @@ public class BotonPrimario extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         ButtonModel modelo = getModel();
-        Color base = Estilos.acento();
+        Color base = EstilosYberia.acento();
         Color relleno;
         if (!isEnabled()) {
-            relleno = Estilos.textoSecundario();
+            relleno = EstilosYberia.textoSecundario();
         } else if (modelo.isPressed()) {
             relleno = base.darker();
         } else if (modelo.isRollover()) {
@@ -48,7 +47,7 @@ public class BotonPrimario extends JButton {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(relleno);
-        g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), Estilos.ARC, Estilos.ARC));
+        g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), EstilosYberia.ARC_YBERIA, EstilosYberia.ARC_YBERIA));
         g2.dispose();
         super.paintComponent(g);
     }

@@ -2,7 +2,8 @@ package pe.farmaguard.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import pe.farmaguard.model.MedicamentoYberia;
-import pe.farmaguard.util.Texto;
+import pe.farmaguard.util.SinonimosYberia;
+import pe.farmaguard.util.TextoYberia;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -27,53 +28,53 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
-public class CampoBusqueda extends JTextField {
+public class CampoBusquedaYberia extends JTextField {
+    private static final int MAX_SUGERENCIAS_YBERIA = 6;
 
-    private static final int MAX_SUGERENCIAS = 6;
+    private final List<MedicamentoYberia> catalogoYberia;
+    private final DefaultListModel<MedicamentoYberia> sugerenciasYberia = new DefaultListModel<>();
+    private final JList<MedicamentoYberia> listaYberia = new JList<>(sugerenciasYberia);
+    private final JPopupMenu popupYberia = new JPopupMenu();
+    private Consumer<MedicamentoYberia> alElegirYberia = m -> setTextoSinSugerir(m.getNombre());
+    private boolean ajustandoYberia;
 
-    private final List<MedicamentoYberia> catalogo;
-    private final DefaultListModel<MedicamentoYberia> sugerencias = new DefaultListModel<>();
-    private final JList<MedicamentoYberia> lista = new JList<>(sugerencias);
-    private final JPopupMenu popup = new JPopupMenu();
-    private Consumer<MedicamentoYberia> alElegir = m -> setTextoSinSugerir(m.getNombre());
-    private boolean ajustando;
-
-    public CampoBusqueda(List<MedicamentoYberia> catalogo, String ayuda) {
-        this.catalogo = catalogo;
+    public CampoBusquedaYberia(List<MedicamentoYberia> catalogoYberia, String ayuda) {
+        this.catalogoYberia = catalogoYberia;
         putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, ayuda);
-        putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, Iconos.buscar(16));
+        putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, IconosYberia.buscar(16));
         putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
         setMargin(new Insets(8, 8, 8, 8));
 
-        lista.setCellRenderer(new RenderizadorMedicamento());
-        lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lista.setFocusable(false);
-        lista.addMouseListener(new MouseAdapter() {
+        listaYberia.setCellRenderer(new RenderizadorMedicamentoYberia());
+        listaYberia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaYberia.setFocusable(false);
+        listaYberia.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                int indice = lista.locationToIndex(e.getPoint());
+                int indice = listaYberia.locationToIndex(e.getPoint());
                 if (indice >= 0) {
-                    elegir(sugerencias.get(indice));
+                    elegir(sugerenciasYberia.get(indice));
                 }
             }
         });
-        lista.addMouseMotionListener(new MouseAdapter() {
+        listaYberia.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                int indice = lista.locationToIndex(e.getPoint());
+                int indice = listaYberia.locationToIndex(e.getPoint());
                 if (indice >= 0) {
-                    lista.setSelectedIndex(indice);
+                    listaYberia.setSelectedIndex(indice);
                 }
             }
         });
 
-        JScrollPane scroll = new JScrollPane(lista);
+        JScrollPane scroll = new JScrollPane(listaYberia);
         scroll.setBorder(BorderFactory.createEmptyBorder());
-        popup.add(scroll);
-        popup.setFocusable(false);
-        popup.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        popupYberia.add(scroll);
+        popupYberia.setFocusable(false);
+        popupYberia.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -94,20 +95,20 @@ public class CampoBusqueda extends JTextField {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (!popup.isVisible()) {
+                if (!popupYberia.isVisible()) {
                     return;
                 }
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_DOWN -> mover(1, e);
                     case KeyEvent.VK_UP -> mover(-1, e);
                     case KeyEvent.VK_ENTER -> {
-                        if (lista.getSelectedValue() != null) {
-                            elegir(lista.getSelectedValue());
+                        if (listaYberia.getSelectedValue() != null) {
+                            elegir(listaYberia.getSelectedValue());
                             e.consume();
                         }
                     }
                     case KeyEvent.VK_ESCAPE -> {
-                        popup.setVisible(false);
+                        popupYberia.setVisible(false);
                         e.consume();
                     }
                     default -> {
@@ -118,13 +119,13 @@ public class CampoBusqueda extends JTextField {
         addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                popup.setVisible(false);
+                popupYberia.setVisible(false);
             }
         });
     }
 
     public void alElegir(Consumer<MedicamentoYberia> oyente) {
-        this.alElegir = oyente;
+        this.alElegirYberia = oyente;
     }
 
     public void setAccionesFinales(JComponent... acciones) {
@@ -137,64 +138,66 @@ public class CampoBusqueda extends JTextField {
     }
 
     public void setTextoSinSugerir(String texto) {
-        ajustando = true;
+        ajustandoYberia = true;
         setText(texto);
-        ajustando = false;
-        popup.setVisible(false);
+        ajustandoYberia = false;
+        popupYberia.setVisible(false);
     }
 
     @Override
     public void updateUI() {
         super.updateUI();
-        if (popup != null) {
-            SwingUtilities.updateComponentTreeUI(popup);
+        if (popupYberia != null) {
+            SwingUtilities.updateComponentTreeUI(popupYberia);
         }
     }
 
     private void programarSugerencias() {
-        if (!ajustando) {
+        if (!ajustandoYberia) {
             SwingUtilities.invokeLater(this::actualizarSugerencias);
         }
     }
 
     private void actualizarSugerencias() {
-        String consulta = Texto.normalizar(getText());
+        String consulta = TextoYberia.normalizar(getText());
         if (consulta.isEmpty() || !isShowing() || !isFocusOwner()) {
-            popup.setVisible(false);
+            popupYberia.setVisible(false);
             return;
         }
-        sugerencias.clear();
-        catalogo.stream()
-                .filter(m -> Texto.normalizar(m.getNombre()).contains(consulta)
-                        || Texto.normalizar(m.getPrincipioActivo()).contains(consulta))
-                .sorted(Comparator.comparing((MedicamentoYberia m) -> !Texto.normalizar(m.getNombre()).startsWith(consulta))
+        sugerenciasYberia.clear();
+        Set<String> terminos = SinonimosYberia.terminosDeBusqueda(consulta);
+        catalogoYberia.stream()
+                .filter(m -> SinonimosYberia.coincide(m.getNombre(), terminos)
+                        || SinonimosYberia.coincide(m.getPrincipioActivo(), terminos))
+                .sorted(Comparator.comparing((MedicamentoYberia m) -> terminos.stream()
+                                .noneMatch(SinonimosYberia.canonico(m.getNombre())::startsWith))
                         .thenComparing(MedicamentoYberia::getNombre))
-                .limit(MAX_SUGERENCIAS)
-                .forEach(sugerencias::addElement);
-        if (sugerencias.isEmpty()) {
-            popup.setVisible(false);
+                .limit(MAX_SUGERENCIAS_YBERIA)
+                .forEach(sugerenciasYberia::addElement);
+        if (sugerenciasYberia.isEmpty()) {
+            popupYberia.setVisible(false);
             return;
         }
-        lista.setSelectedIndex(0);
-        lista.setVisibleRowCount(sugerencias.size());
-        Dimension tam = lista.getPreferredScrollableViewportSize();
-        lista.getParent().getParent().setPreferredSize(new Dimension(getWidth() - 8, tam.height));
-        if (popup.isVisible()) {
-            popup.pack();
+        listaYberia.setSelectedIndex(0);
+        listaYberia.setVisibleRowCount(sugerenciasYberia.size());
+        Dimension tam = listaYberia.getPreferredScrollableViewportSize();
+        listaYberia.getParent().getParent().setPreferredSize(new Dimension(getWidth() - 8, tam.height));
+        if (popupYberia.isVisible()) {
+            popupYberia.pack();
         } else {
-            popup.show(this, 0, getHeight() + 4);
+            popupYberia.show(this, 0, getHeight() + 4);
         }
     }
 
     private void mover(int delta, KeyEvent e) {
-        int indice = Math.floorMod(lista.getSelectedIndex() + delta, sugerencias.size());
-        lista.setSelectedIndex(indice);
-        lista.ensureIndexIsVisible(indice);
+        int indice = Math.floorMod(listaYberia.getSelectedIndex() + delta, sugerenciasYberia.size());
+        listaYberia.setSelectedIndex(indice);
+        listaYberia.ensureIndexIsVisible(indice);
         e.consume();
     }
 
     private void elegir(MedicamentoYberia medicamentoYberia) {
-        popup.setVisible(false);
-        alElegir.accept(medicamentoYberia);
+        popupYberia.setVisible(false);
+        alElegirYberia.accept(medicamentoYberia);
     }
 }

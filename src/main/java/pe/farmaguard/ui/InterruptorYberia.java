@@ -10,12 +10,11 @@ import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 
-public class Interruptor extends JToggleButton {
+public class InterruptorYberia extends JToggleButton {
+    private static final int ANCHO_YBERIA = 42;
+    private static final int ALTO_YBERIA = 24;
 
-    private static final int ANCHO = 42;
-    private static final int ALTO = 24;
-
-    public Interruptor(boolean encendido) {
+    public InterruptorYberia(boolean encendido) {
         setSelected(encendido);
         setContentAreaFilled(false);
         setBorderPainted(false);
@@ -25,7 +24,7 @@ public class Interruptor extends JToggleButton {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(ANCHO, ALTO);
+        return new Dimension(ANCHO_YBERIA, ALTO_YBERIA);
     }
 
     @Override
@@ -37,11 +36,11 @@ public class Interruptor extends JToggleButton {
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        int y = (getHeight() - ALTO) / 2;
-        g2.setColor(isSelected() ? Estilos.acento() : (Estilos.esOscuro() ? new Color(0x5A5E66) : new Color(0xCBD0D6)));
-        g2.fill(new RoundRectangle2D.Float(0, y, ANCHO, ALTO, ALTO, ALTO));
-        int perilla = ALTO - 6;
-        int x = isSelected() ? ANCHO - perilla - 3 : 3;
+        int y = (getHeight() - ALTO_YBERIA) / 2;
+        g2.setColor(isSelected() ? EstilosYberia.acento() : (EstilosYberia.esOscuro() ? new Color(0x5A5E66) : new Color(0xCBD0D6)));
+        g2.fill(new RoundRectangle2D.Float(0, y, ANCHO_YBERIA, ALTO_YBERIA, ALTO_YBERIA, ALTO_YBERIA));
+        int perilla = ALTO_YBERIA - 6;
+        int x = isSelected() ? ANCHO_YBERIA - perilla - 3 : 3;
         g2.setColor(new Color(0, 0, 0, 40));
         g2.fill(new Ellipse2D.Float(x, y + 4f, perilla, perilla));
         g2.setColor(Color.WHITE);

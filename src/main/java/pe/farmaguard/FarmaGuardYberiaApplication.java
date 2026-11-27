@@ -7,7 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import pe.farmaguard.service.CompatibilidadYberiaService;
 import pe.farmaguard.service.MedicamentoYberiaService;
 import pe.farmaguard.service.RecordatorioYberiaService;
-import pe.farmaguard.ui.Estilos;
+import pe.farmaguard.ui.EstilosYberia;
 import pe.farmaguard.ui.MainFrameYberia;
 
 import javax.swing.JOptionPane;
@@ -18,9 +18,8 @@ import java.nio.file.Path;
 
 @SpringBootApplication
 public class FarmaGuardYberiaApplication {
-
     public static void main(String[] args) {
-        Estilos.instalarTema();
+        EstilosYberia.instalarTema();
 
         ConfigurableApplicationContext contextoYberia;
         try {

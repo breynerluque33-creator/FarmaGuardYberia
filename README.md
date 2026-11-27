@@ -29,7 +29,7 @@ No necesita internet para funcionar.
 
 ## 💻 Instalar en Windows (la forma fácil)
 
-1. Entra a la sección **[Releases](https://github.com/breynerluque33-creator/FarmaGuardYberia/releases)** de este repositorio y descarga el archivo **`FarmaGuard-1.0.0.exe`**.
+1. Entra a la sección **[Releases](https://github.com/breynerluque33-creator/FarmaGuardYberia/releases)** de este repositorio y descarga el archivo **`FarmaGuard-1.1.0.exe`**.
 2. Haz doble clic en el archivo descargado.
 3. Si aparece una ventana azul que dice **"Windows protegió su PC"**:
    - Haz clic en **"Más información"**.
@@ -58,10 +58,15 @@ El programa tiene tres pestañas arriba:
    - 🔴 **Incompatible o redundante:** no deberían tomarse juntos o estás pagando dos veces por lo mismo.
 
    También puedes pulsar **"Pegar una lista o receta"** para agregar varios a la vez.
-2. **Medicamentos:** busca cualquier medicamento del catálogo para ver para qué sirve y con qué no debes combinarlo.
-3. **Recordatorios:** crea avisos para cada toma (antes, durante o después de comer). FarmaGuard te avisará mientras el programa esté abierto.
+2. **Medicamentos:** busca cualquier medicamento del catálogo para ver para qué sirve y con qué no debes combinarlo. Puedes buscar por marca, genérico u otro nombre del mismo componente: *clorfeniramina*, *maleato de clorfenamina* y *clorfenamina* muestran la misma ficha. Las marcas con varios componentes (ej. *Dr. Flu*) muestran todos sus componentes de una vez.
+3. **Recordatorios:** muestra tu agenda. Pulsa **Nuevo recordatorio** para crear un aviso (antes, durante o después de comer). Si el medicamento va con las comidas, las tomas se ponen junto al desayuno, almuerzo y cena. FarmaGuard te avisará mientras el programa esté abierto.
 
-El botón de la 🌙 luna (arriba a la derecha) cambia entre tema claro y oscuro.
+Botones de arriba a la derecha:
+- **?** abre la guía de uso (se muestra sola la primera vez que abres el programa).
+- 🌙 **luna** cambia entre tema claro y oscuro.
+- **i** muestra el aviso importante: FarmaGuard no reemplaza la opinión de un médico.
+
+> Los sinónimos y marcas de un solo componente se configuran en `src/main/resources/sinonimos.txt` (una línea por principio activo: `Clorfenamina = Clorfeniramina, Maleato de clorfeniramina`).
 
 ---
 
@@ -93,7 +98,7 @@ Con Java JDK 17+ y WiX Toolset instalados, ejecuta en la carpeta del proyecto:
 ```bash
 powershell -ExecutionPolicy Bypass -File .\empaquetar.ps1
 ```
-El instalador aparecerá en `target\dist\FarmaGuard-1.0.0.exe` y también se copiará a tu Escritorio.
+El instalador aparecerá en `target\dist\FarmaGuard-1.1.0.exe` y también se copiará a tu Escritorio.
 
 ---
 

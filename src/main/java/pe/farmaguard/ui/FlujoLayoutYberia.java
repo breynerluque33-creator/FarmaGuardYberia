@@ -6,9 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 
-class FlujoLayout extends FlowLayout {
-
-    FlujoLayout(int espacioHorizontal, int espacioVertical) {
+class FlujoLayoutYberia extends FlowLayout {
+    FlujoLayoutYberia(int espacioHorizontal, int espacioVertical) {
         super(LEFT, espacioHorizontal, espacioVertical);
     }
 

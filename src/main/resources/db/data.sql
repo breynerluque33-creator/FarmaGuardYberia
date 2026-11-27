@@ -1,8 +1,3 @@
--- FarmaGuard - catálogo inicial de medicamentos comunes en Perú e interacciones conocidas.
--- Información orientativa para adultos. No reemplaza la indicación de un médico o químico farmacéutico.
--- Las composiciones de marcas son referenciales: siempre verificar el empaque.
--- Importante: no usar ";" dentro de los textos (Spring lo usa como separador de sentencias).
-
 INSERT OR REPLACE INTO medicamentos
 (id, nombre, principio_activo, categoria, concentracion, dosis_mg, dosis_max_unidad_mg, dosis_max_diaria_mg,
  unidades_dia_habitual, dosis_sugerida, momento_comida, requiere_receta, descripcion, consejos)
@@ -63,7 +58,7 @@ VALUES
  'No la des a menores de 16 años. Evítala si tienes gastritis, úlcera, dengue o tomas anticoagulantes, porque aumenta el sangrado.'),
 
 (12, 'Alka-Seltzer', 'Ácido acetilsalicílico + Bicarbonato de sodio + Ácido cítrico', 'Malestar estomacal', 'Tableta efervescente (aspirina 324 mg)', 324, 1000, 4000, 4,
- '2 tabletas disueltas en agua cada 4 a 6 horas si es necesario. Máximo 8 al día.', 'INDIFERENTE', 0,
+ '2 tabletas disueltas en agua cada 4 a 6 horas si es necesario. Máximo 8 al día.', 'DESPUES', 0,
  'Antiácido efervescente que además contiene aspirina. Se usa para acidez con dolor de cabeza. Composición referencial, verifica el empaque.',
  'Contiene aspirina: no lo combines con Aspirina, ibuprofeno ni otros antiinflamatorios. Tiene mucho sodio, cuidado si tienes presión alta.'),
 
@@ -172,9 +167,7 @@ VALUES
  'Suplemento de vitamina C. No previene ni cura el resfrío de forma importante.',
  'Frutas como naranja, mandarina o camu camu ya aportan suficiente vitamina C. Dosis altas pueden dar diarrea o favorecer cálculos renales.');
 
-
 INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo, explicacion) VALUES
--- Dos antiinflamatorios (AINE) juntos
 (1, 'Ibuprofeno', 'Naproxeno', 'PELIGRO', 'Ambos son antiinflamatorios (AINE). Juntos no calman más el dolor, pero sí aumentan mucho el riesgo de gastritis, úlcera, sangrado digestivo y daño a los riñones. Elige solo uno.'),
 (2, 'Ibuprofeno', 'Diclofenaco', 'PELIGRO', 'Ambos son antiinflamatorios (AINE). Juntos no calman más el dolor, pero sí aumentan mucho el riesgo de gastritis, úlcera, sangrado digestivo y daño a los riñones. Elige solo uno.'),
 (3, 'Ibuprofeno', 'Ketorolaco', 'PELIGRO', 'El ketorolaco es un antiinflamatorio muy potente. Sumarle ibuprofeno multiplica el riesgo de sangrado digestivo y daño renal sin mejorar el alivio.'),
@@ -186,7 +179,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (9, 'Diclofenaco', 'Ácido acetilsalicílico', 'PELIGRO', 'Ambos son antiinflamatorios. Juntos aumentan el riesgo de sangrado y úlcera sin dar más alivio.'),
 (10, 'Ketorolaco', 'Ácido acetilsalicílico', 'PELIGRO', 'El ketorolaco no debe combinarse con aspirina: el riesgo de sangrado digestivo grave es muy alto.'),
 
--- Anticoagulante
 (11, 'Warfarina', 'Ácido acetilsalicílico', 'PELIGRO', 'La aspirina potencia el efecto anticoagulante de la warfarina y puede provocar sangrados graves. No la tomes sin indicación de tu médico.'),
 (12, 'Warfarina', 'Ibuprofeno', 'PELIGRO', 'El ibuprofeno con warfarina aumenta el riesgo de sangrado, sobre todo en el estómago. Para el dolor suele preferirse paracetamol en dosis moderadas, consulta a tu médico.'),
 (13, 'Warfarina', 'Naproxeno', 'PELIGRO', 'El naproxeno con warfarina aumenta el riesgo de sangrado, sobre todo en el estómago. Consulta a tu médico antes de tomarlo.'),
@@ -199,12 +191,10 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (20, 'Warfarina', 'Subsalicilato de bismuto', 'PRECAUCION', 'El subsalicilato de bismuto contiene salicilato, parecido a la aspirina, y puede aumentar el riesgo de sangrado con warfarina.'),
 (21, 'Warfarina', 'Azitromicina', 'PRECAUCION', 'La azitromicina puede aumentar el efecto de la warfarina. Avisa a tu médico para que controle tu INR.'),
 
--- Salicilatos y estómago
 (22, 'Ácido acetilsalicílico', 'Subsalicilato de bismuto', 'PELIGRO', 'Ambos contienen salicilatos. Juntos puedes acumular demasiado (zumbido de oídos, náuseas, sangrado). Elige solo uno.'),
 (23, 'Ciprofloxacino', 'Subsalicilato de bismuto', 'PRECAUCION', 'El bismuto reduce la absorción del ciprofloxacino y el antibiótico puede no funcionar. Toma el antibiótico 2 horas antes o 6 horas después.'),
 (24, 'Subsalicilato de bismuto', 'Bicarbonato de sodio', 'PRECAUCION', 'Ambos se usan para el malestar estomacal. Normalmente basta con uno: podría ser una venta redundante.'),
 
--- Presión arterial
 (25, 'Losartán', 'Enalapril', 'PELIGRO', 'Son dos medicamentos para la presión que actúan sobre el mismo sistema. Juntos pueden subir el potasio y dañar los riñones. Solo un cardiólogo debería indicarlos juntos.'),
 (26, 'Losartán', 'Ibuprofeno', 'PRECAUCION', 'El ibuprofeno le quita efecto al losartán y juntos pueden afectar los riñones. Si es por pocos días y estás bien hidratado el riesgo baja, pero consulta.'),
 (27, 'Losartán', 'Naproxeno', 'PRECAUCION', 'El naproxeno le quita efecto al losartán y juntos pueden afectar los riñones. Consulta antes de usarlo varios días.'),
@@ -217,12 +207,10 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (34, 'Losartán', 'Bicarbonato de sodio', 'PRECAUCION', 'Los antiácidos efervescentes tienen mucho sodio, que sube la presión. Úsalos solo de forma ocasional.'),
 (35, 'Enalapril', 'Bicarbonato de sodio', 'PRECAUCION', 'Los antiácidos efervescentes tienen mucho sodio, que sube la presión. Úsalos solo de forma ocasional.'),
 
--- Antialérgicos duplicados
 (36, 'Clorfenamina', 'Loratadina', 'PRECAUCION', 'Son dos antialérgicos. Juntos no alivian más la alergia, pero sí dan más sueño y boca seca. Muchos antigripales ya traen clorfenamina.'),
 (37, 'Clorfenamina', 'Cetirizina', 'PRECAUCION', 'Son dos antialérgicos. Juntos no alivian más la alergia, pero sí dan más sueño y boca seca.'),
 (38, 'Loratadina', 'Cetirizina', 'PRECAUCION', 'Son dos antialérgicos de acción prolongada. Basta con uno de ellos al día.'),
 
--- Corticoide
 (39, 'Dexametasona', 'Ibuprofeno', 'PELIGRO', 'Un corticoide junto con un antiinflamatorio (AINE) multiplica el riesgo de gastritis, úlcera y sangrado digestivo. Además, el corticoide ya desinflama: sumar un AINE suele ser una venta innecesaria. Solo con indicación médica y protector gástrico.'),
 (40, 'Dexametasona', 'Naproxeno', 'PELIGRO', 'Un corticoide junto con un antiinflamatorio (AINE) multiplica el riesgo de gastritis, úlcera y sangrado digestivo. Además, el corticoide ya desinflama: sumar un AINE suele ser una venta innecesaria. Solo con indicación médica y protector gástrico.'),
 (41, 'Dexametasona', 'Diclofenaco', 'PELIGRO', 'Un corticoide junto con un antiinflamatorio (AINE) multiplica el riesgo de gastritis, úlcera y sangrado digestivo. Además, el corticoide ya desinflama: sumar un AINE suele ser una venta innecesaria. Solo con indicación médica y protector gástrico.'),
@@ -230,19 +218,13 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (43, 'Dexametasona', 'Ácido acetilsalicílico', 'PELIGRO', 'Un corticoide junto con aspirina multiplica el riesgo de gastritis, úlcera y sangrado digestivo. Solo con indicación médica.'),
 (44, 'Dexametasona', 'Metformina', 'PRECAUCION', 'La dexametasona sube el azúcar en la sangre y contrarresta a la metformina. Si eres diabético, avisa a tu médico y controla tu glucosa.'),
 
--- Otros
 (45, 'Azitromicina', 'Ciprofloxacino', 'PRECAUCION', 'Son dos antibióticos distintos: rara vez se necesitan juntos y ambos pueden alterar el ritmo del corazón. Solo con receta que indique los dos.'),
 (46, 'Paracetamol', 'Metamizol', 'PRECAUCION', 'Ambos sirven para el dolor y la fiebre. Normalmente no se necesitan juntos: solo combínalos si el médico lo indicó.');
 
-
--- =====================================================================================
--- Catálogo ampliado: medicamentos y marcas de mayor venta en boticas del Perú
--- =====================================================================================
 INSERT OR REPLACE INTO medicamentos
 (id, nombre, principio_activo, categoria, concentracion, dosis_mg, dosis_max_unidad_mg, dosis_max_diaria_mg,
  unidades_dia_habitual, dosis_sugerida, momento_comida, requiere_receta, descripcion, consejos)
 VALUES
--- Analgésicos
 (34, 'Paracetamol 1 g', 'Paracetamol', 'Analgésico y antipirético', '1 g tableta', 1000, 1000, 4000, 3,
  '1 tableta cada 8 horas. Máximo 4 tabletas al día.', 'INDIFERENTE', 0,
  'Paracetamol en dosis alta por tableta, para dolor o fiebre en adultos.',
@@ -260,7 +242,6 @@ VALUES
  'Analgésico opioide para dolor moderado a intenso.',
  'Da sueño y mareo y puede causar dependencia. No lo mezcles con alcohol, sedantes ni antidepresivos sin indicación médica.'),
 
--- Antiinflamatorios (AINE) y variantes de concentración
 (38, 'Ibuprofeno 200 mg', 'Ibuprofeno', 'Antiinflamatorio (AINE)', '200 mg tableta', 200, 400, 1200, 3,
  '1 a 2 tabletas cada 6 a 8 horas. Máximo 6 tabletas al día sin receta.', 'DESPUES', 0,
  'Ibuprofeno en dosis baja para dolor leve, fiebre e inflamación.',
@@ -318,7 +299,6 @@ VALUES
  'Antiinflamatorio de acción rápida para dolor agudo (muelas, golpes, menstruación).',
  'Para un efecto más rápido tómalo 30 minutos antes de comer. No lo combines con otros antiinflamatorios.'),
 
--- Corazón y circulación (antiagregantes)
 (52, 'Aspirina 100 mg', 'Ácido acetilsalicílico', 'Antiagregante plaquetario', '100 mg tableta', 100, 1000, 4000, 1,
  'Por indicación médica, 1 tableta al día.', 'DESPUES', 0,
  'Aspirina en dosis baja: por indicación médica previene infartos y derrames cerebrales.',
@@ -328,7 +308,6 @@ VALUES
  'Evita que las plaquetas formen coágulos tras un infarto, un stent o un derrame cerebral.',
  'No lo suspendas sin consultar. Avisa antes de cualquier cirugía o extracción dental.'),
 
--- Resfrío, tos y respiratorio
 (54, 'Nastizol', 'Paracetamol + Fenilefrina + Clorfenamina', 'Antigripal', 'Tableta (paracetamol 500 mg)', 500, 1000, 4000, 3,
  '1 tableta cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
  'Antigripal que combina paracetamol, un descongestionante y un antialérgico para los síntomas del resfrío. Composición referencial, verifica el empaque.',
@@ -366,7 +345,6 @@ VALUES
  'Previene crisis de asma y alivia la rinitis alérgica.',
  'No sirve para una crisis de asma en curso. Avisa al médico si notas cambios de ánimo o pesadillas.'),
 
--- Antialérgicos
 (63, 'Desloratadina', 'Desloratadina', 'Antihistamínico', '5 mg tableta', 5, 5, 5, 1,
  '1 tableta una vez al día.', 'INDIFERENTE', 0,
  'Antialérgico de una toma al día para rinitis y urticaria. Casi no da sueño.',
@@ -396,7 +374,6 @@ VALUES
  'Antialérgico para picazón intensa. También calma la ansiedad.',
  'Da mucho sueño: no manejes. Evita el alcohol.'),
 
--- Mareo, náuseas y vértigo
 (70, 'Gravol', 'Dimenhidrinato', 'Antiemético y mareo', '50 mg tableta', 50, 100, 400, 3,
  '1 a 2 tabletas cada 6 a 8 horas. Para viajes, 30 minutos antes de salir.', 'INDIFERENTE', 0,
  'Previene y alivia el mareo en viajes, las náuseas y los vómitos.',
@@ -430,7 +407,6 @@ VALUES
  'Trata el vértigo de origen en el oído interno.',
  'Tómala con las comidas para evitar molestias estomacales.'),
 
--- Estómago
 (78, 'Mylanta', 'Hidróxido de aluminio + Hidróxido de magnesio + Simeticona', 'Malestar estomacal', 'Suspensión oral', NULL, NULL, NULL, 3,
  '1 a 2 cucharadas después de las comidas y al acostarse.', 'DESPUES', 0,
  'Antiácido que neutraliza la acidez y reduce los gases. Composición referencial, verifica el empaque.',
@@ -472,7 +448,6 @@ VALUES
  'Reduce la acidez y el ardor de estómago.',
  'Si la acidez dura más de 2 semanas, consulta al médico.'),
 
--- Cólicos
 (88, 'Buscapina', 'Butilhioscina', 'Antiespasmódico', '10 mg tableta', 10, 20, 60, 3,
  '1 a 2 tabletas cada 8 horas.', 'INDIFERENTE', 0,
  'Alivia cólicos y retorcijones del estómago, intestino y menstruales.',
@@ -482,7 +457,6 @@ VALUES
  'Antiespasmódico genérico: mismo componente que Buscapina.',
  'Si ya tienes Buscapina no necesitas el genérico (y al revés).'),
 
--- Diarrea y estreñimiento
 (90, 'Loperamida', 'Loperamida', 'Antidiarreico', '2 mg tableta', 2, 4, 8, 2,
  '2 tabletas al inicio y 1 tras cada deposición líquida. Máximo 4 al día sin receta.', 'INDIFERENTE', 0,
  'Frena la diarrea aguda sin fiebre ni sangre.',
@@ -516,7 +490,6 @@ VALUES
  'Laxante de origen vegetal (sen) para estreñimiento ocasional.',
  'El uso prolongado acostumbra al intestino. Consulta si el estreñimiento es frecuente.'),
 
--- Antibióticos
 (98, 'Amoxicilina + Ácido clavulánico', 'Amoxicilina + Ácido clavulánico', 'Antibiótico', '875 / 125 mg tableta', 875, 875, 1750, 2,
  'Según receta, 1 tableta cada 12 horas.', 'DURANTE', 1,
  'Amoxicilina reforzada con ácido clavulánico para infecciones resistentes.',
@@ -526,7 +499,7 @@ VALUES
  'Antibiótico (cefalosporina) para infecciones de piel, garganta y vías urinarias.',
  'Si eres alérgico a la penicilina avisa al médico. Cumple todo el tratamiento.'),
 (100, 'Cefuroxima', 'Cefuroxima', 'Antibiótico', '500 mg tableta', 500, 500, 1000, 2,
- 'Según receta, 1 tableta cada 12 horas.', 'DESPUES', 1,
+ 'Según receta, 1 tableta cada 12 horas.', 'DURANTE', 1,
  'Antibiótico para infecciones respiratorias, de oído y urinarias.',
  'Tómalo después de comer para absorberlo mejor.'),
 (101, 'Claritromicina', 'Claritromicina', 'Antibiótico', '500 mg tableta', 500, 500, 1000, 2,
@@ -562,9 +535,8 @@ VALUES
  'Antibiótico para infecciones urinarias.',
  'Tómala con comida. Puede oscurecer la orina, es normal.'),
 
--- Antiparasitarios
 (109, 'Albendazol', 'Albendazol', 'Antiparasitario', '400 mg tableta', 400, 400, 800, 1,
- 'Habitualmente dosis única de 1 tableta.', 'DESPUES', 0,
+ 'Habitualmente dosis única de 1 tableta.', 'DURANTE', 0,
  'Antiparasitario para lombrices intestinales.',
  'No lo uses en el embarazo. Toda la familia suele necesitar tratamiento.'),
 (110, 'Mebendazol', 'Mebendazol', 'Antiparasitario', '100 mg tableta', 100, 100, 200, 2,
@@ -588,7 +560,6 @@ VALUES
  'Antiparasitario para sarna, piojos y algunos parásitos intestinales.',
  'No sirve para prevenir ni tratar el COVID-19. Tómala en ayunas.'),
 
--- Hongos y virus
 (115, 'Terbinafina', 'Terbinafina', 'Antimicótico', '250 mg tableta', 250, 250, 250, 1,
  'Según receta, 1 tableta al día por varias semanas.', 'INDIFERENTE', 1,
  'Antimicótico para hongos en uñas y piel.',
@@ -606,7 +577,6 @@ VALUES
  'Antiviral para la influenza (gripe por virus influenza), no para el resfrío común.',
  'Funciona mejor si se empieza en las primeras 48 horas.'),
 
--- Presión arterial y corazón
 (119, 'Captopril', 'Captopril', 'Antihipertensivo', '25 mg tableta', 25, 50, 150, 2,
  'Según receta, 1 tableta cada 8 a 12 horas.', 'ANTES', 1,
  'Controla la presión arterial alta y ayuda en la insuficiencia cardiaca.',
@@ -672,7 +642,6 @@ VALUES
  'Regula el ritmo del corazón y ayuda en la insuficiencia cardiaca.',
  'Tiene un margen muy estrecho entre dosis útil y tóxica. Avisa si tienes náuseas o ves luces amarillas.'),
 
--- Colesterol
 (135, 'Atorvastatina', 'Atorvastatina', 'Hipolipemiante (colesterol)', '20 mg tableta', 20, 80, 80, 1,
  'Según receta, 1 tableta al día.', 'INDIFERENTE', 1,
  'Baja el colesterol y reduce el riesgo de infarto.',
@@ -694,7 +663,6 @@ VALUES
  'Baja los triglicéridos.',
  'Combinado con estatinas aumenta el riesgo de daño muscular grave.'),
 
--- Diabetes
 (140, 'Glibenclamida', 'Glibenclamida', 'Antidiabético', '5 mg tableta', 5, 10, 15, 2,
  'Según receta, con el desayuno y la cena.', 'DURANTE', 1,
  'Estimula al páncreas a producir insulina para bajar el azúcar.',
@@ -720,7 +688,6 @@ VALUES
  'Reemplaza la hormona tiroidea en el hipotiroidismo.',
  'Tómala en ayunas con agua, 30 a 60 minutos antes del desayuno. Sepárala 4 horas de calcio, hierro y antiácidos.'),
 
--- Sistema nervioso
 (146, 'Alprazolam', 'Alprazolam', 'Ansiolítico (benzodiazepina)', '0.5 mg tableta', 0.5, 1, 4, 2,
  'Solo con receta especial.', 'INDIFERENTE', 1,
  'Ansiolítico para crisis de ansiedad y pánico.',
@@ -778,7 +745,6 @@ VALUES
  'Relajante muscular para contracturas dolorosas.',
  'Da sueño. No lo combines con antidepresivos ni sedantes.'),
 
--- Urología y salud sexual
 (160, 'Sildenafil', 'Sildenafil', 'Disfunción eréctil', '50 mg tableta', 50, 100, 100, 1,
  'Según receta, 1 tableta 1 hora antes de la relación. Máximo 1 al día.', 'ANTES', 1,
  'Trata la disfunción eréctil.',
@@ -804,7 +770,6 @@ VALUES
  'Reduce el tamaño de la próstata agrandada.',
  'El efecto tarda meses. Las mujeres embarazadas no deben manipular tabletas partidas.'),
 
--- Salud de la mujer, anemia y suplementos
 (166, 'Anticonceptivo oral combinado', 'Levonorgestrel + Etinilestradiol', 'Anticonceptivo', 'Tableta (ciclo de 21 o 28)', NULL, NULL, NULL, 1,
  '1 tableta al día a la misma hora.', 'INDIFERENTE', 0,
  'Pastilla anticonceptiva de uso diario.',
@@ -850,7 +815,6 @@ VALUES
  'Suplemento de aceite de pescado.',
  'Comer pescado 2 veces por semana aporta lo mismo.'),
 
--- Gota y corticoides
 (177, 'Alopurinol', 'Alopurinol', 'Antigotoso', '300 mg tableta', 300, 300, 800, 1,
  'Según receta, 1 tableta al día después de comer.', 'DESPUES', 1,
  'Previene los ataques de gota bajando el ácido úrico. No sirve durante la crisis.',
@@ -868,11 +832,7 @@ VALUES
  'Prednisona en dosis baja.',
  'No la combines con otra presentación de prednisona.');
 
-
--- Reglas nuevas. Un término "Grupo: <categoría>" aplica a todos los medicamentos de esa categoría,
--- así una sola regla cubre, por ejemplo, cualquier par de antiinflamatorios (AINE).
 INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo, explicacion) VALUES
--- Reglas por grupo
 (47, 'Grupo: Antiinflamatorio (AINE)', 'Grupo: Antiinflamatorio (AINE)', 'PELIGRO', 'Ambos son antiinflamatorios (AINE). Juntos no calman más el dolor, pero sí aumentan mucho el riesgo de gastritis, úlcera, sangrado digestivo y daño a los riñones. Elige solo uno.'),
 (48, 'Warfarina', 'Grupo: Antiinflamatorio (AINE)', 'PELIGRO', 'Los antiinflamatorios con warfarina aumentan el riesgo de sangrado grave, sobre todo en el estómago. Consulta a tu médico antes de tomarlos.'),
 (49, 'Grupo: Antihipertensivo', 'Grupo: Antiinflamatorio (AINE)', 'PRECAUCION', 'Los antiinflamatorios suben la presión y le quitan efecto a los medicamentos para la presión. Usados varios días también pueden dañar los riñones.'),
@@ -898,7 +858,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (69, 'Bacillus clausii', 'Grupo: Antibiótico', 'PRECAUCION', 'El antibiótico puede eliminar el probiótico: toma el probiótico al menos 2 horas después del antibiótico.'),
 (70, 'Grupo: Antihipertensivo', 'Fenilefrina', 'PRECAUCION', 'La fenilefrina de los antigripales sube la presión arterial y contrarresta tu tratamiento. Pide un antigripal sin descongestionante.'),
 
--- Anticoagulantes y antiagregantes
 (71, 'Clopidogrel', 'Omeprazol', 'PRECAUCION', 'El omeprazol puede quitarle efecto al clopidogrel. Si necesitas protector gástrico suele preferirse pantoprazol.'),
 (72, 'Clopidogrel', 'Esomeprazol', 'PRECAUCION', 'El esomeprazol puede quitarle efecto al clopidogrel. Suele preferirse pantoprazol.'),
 (73, 'Clopidogrel', 'Warfarina', 'PELIGRO', 'Un antiagregante con un anticoagulante aumenta mucho el riesgo de sangrado. Solo con indicación del cardiólogo.'),
@@ -909,7 +868,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (78, 'Warfarina', 'Tramadol', 'PRECAUCION', 'El tramadol puede aumentar el efecto de la warfarina.'),
 (79, 'Warfarina', 'Carbamazepina', 'PRECAUCION', 'La carbamazepina le quita efecto a la warfarina: aumenta el riesgo de coágulos.'),
 
--- Estatinas
 (80, 'Claritromicina', 'Simvastatina', 'PELIGRO', 'La claritromicina eleva mucho los niveles de simvastatina y puede causar daño muscular grave. Suspende la estatina durante el antibiótico solo si el médico lo indica.'),
 (81, 'Claritromicina', 'Atorvastatina', 'PELIGRO', 'La claritromicina eleva los niveles de atorvastatina y el riesgo de daño muscular.'),
 (82, 'Itraconazol', 'Simvastatina', 'PELIGRO', 'El itraconazol eleva mucho los niveles de simvastatina: riesgo de daño muscular grave.'),
@@ -925,7 +883,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (92, 'Colchicina', 'Atorvastatina', 'PRECAUCION', 'Colchicina con estatinas aumenta el riesgo de dolor y daño muscular.'),
 (93, 'Amlodipino', 'Simvastatina', 'PRECAUCION', 'Con amlodipino no se recomienda más de 20 mg de simvastatina al día.'),
 
--- Presión arterial
 (94, 'Losartán', 'Captopril', 'PELIGRO', 'Son dos medicamentos para la presión que actúan sobre el mismo sistema. Juntos pueden subir el potasio y dañar los riñones.'),
 (95, 'Valsartán', 'Enalapril', 'PELIGRO', 'Son dos medicamentos para la presión que actúan sobre el mismo sistema. Juntos pueden subir el potasio y dañar los riñones.'),
 (96, 'Valsartán', 'Captopril', 'PELIGRO', 'Son dos medicamentos para la presión que actúan sobre el mismo sistema. Juntos pueden subir el potasio y dañar los riñones.'),
@@ -941,7 +898,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (106, 'Digoxina', 'Furosemida', 'PRECAUCION', 'La furosemida baja el potasio, lo que aumenta la toxicidad de la digoxina. Requiere control.'),
 (107, 'Digoxina', 'Hidroclorotiazida', 'PRECAUCION', 'El diurético baja el potasio, lo que aumenta la toxicidad de la digoxina. Requiere control.'),
 
--- Salud sexual
 (108, 'Sildenafil', 'Dinitrato de isosorbida', 'PELIGRO', 'Sildenafil con nitratos puede bajar la presión de forma grave y causar un desmayo o infarto. Nunca los combines.'),
 (109, 'Tadalafil', 'Dinitrato de isosorbida', 'PELIGRO', 'Tadalafil con nitratos puede bajar la presión de forma grave. Nunca los combines.'),
 (110, 'Sildenafil', 'Tadalafil', 'PELIGRO', 'Son dos medicamentos para la disfunción eréctil: juntos bajan demasiado la presión. Elige solo uno.'),
@@ -949,14 +905,12 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (112, 'Tadalafil', 'Tamsulosina', 'PRECAUCION', 'Juntos pueden bajar la presión y causar mareo al levantarte.'),
 (113, 'Sildenafil', 'Claritromicina', 'PRECAUCION', 'La claritromicina aumenta los niveles de sildenafil. Usa la dosis más baja.'),
 
--- Diabetes
 (114, 'Glibenclamida', 'Ciprofloxacino', 'PRECAUCION', 'El ciprofloxacino puede alterar el azúcar con glibenclamida, sobre todo bajarlo. Controla tu glucosa.'),
 (115, 'Glibenclamida', 'Levofloxacino', 'PRECAUCION', 'El levofloxacino puede alterar el azúcar con glibenclamida. Controla tu glucosa.'),
 (116, 'Glibenclamida', 'Fluconazol', 'PRECAUCION', 'El fluconazol aumenta el efecto de la glibenclamida y el riesgo de azúcar bajo.'),
 (117, 'Glimepirida', 'Fluconazol', 'PRECAUCION', 'El fluconazol aumenta el efecto de la glimepirida y el riesgo de azúcar bajo.'),
 (118, 'Glibenclamida', 'Glimepirida', 'PELIGRO', 'Son dos medicamentos del mismo tipo para la diabetes: juntos pueden bajar el azúcar de forma peligrosa.'),
 
--- Absorción: antiácidos, calcio y hierro
 (119, 'Ciprofloxacino', 'Carbonato de calcio', 'PRECAUCION', 'El calcio reduce la absorción del ciprofloxacino. Toma el antibiótico 2 horas antes o 6 horas después.'),
 (120, 'Ciprofloxacino', 'Sulfato ferroso', 'PRECAUCION', 'El hierro reduce la absorción del ciprofloxacino. Toma el antibiótico 2 horas antes o 6 horas después.'),
 (121, 'Ciprofloxacino', 'Hidróxido de aluminio', 'PRECAUCION', 'Los antiácidos reducen la absorción del ciprofloxacino. Toma el antibiótico 2 horas antes o 6 horas después.'),
@@ -974,7 +928,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (133, 'Sulfato ferroso', 'Hidróxido de aluminio', 'PRECAUCION', 'Los antiácidos reducen la absorción del hierro. Sepáralos al menos 2 horas.'),
 (134, 'Itraconazol', 'Omeprazol', 'PRECAUCION', 'El itraconazol necesita ácido del estómago para absorberse y el omeprazol lo reduce.'),
 
--- Antibióticos y antiparasitarios duplicados
 (135, 'Metronidazol', 'Tinidazol', 'PELIGRO', 'Son medicamentos de la misma familia: tomarlos juntos duplica el tratamiento y sus efectos adversos. Basta con uno.'),
 (136, 'Metronidazol', 'Secnidazol', 'PELIGRO', 'Son medicamentos de la misma familia: tomarlos juntos duplica el tratamiento y sus efectos adversos. Basta con uno.'),
 (137, 'Tinidazol', 'Secnidazol', 'PELIGRO', 'Son medicamentos de la misma familia: tomarlos juntos duplica el tratamiento y sus efectos adversos. Basta con uno.'),
@@ -989,7 +942,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (146, 'Ondansetrón', 'Levofloxacino', 'PRECAUCION', 'Ambos pueden alterar el ritmo del corazón.'),
 (147, 'Alopurinol', 'Amoxicilina', 'PRECAUCION', 'Con alopurinol, la amoxicilina causa ronchas en la piel con más frecuencia.'),
 
--- Estómago, tos y mareo
 (148, 'Metoclopramida', 'Domperidona', 'PELIGRO', 'Hacen lo mismo y juntas aumentan los efectos adversos sobre el corazón y los movimientos. Basta con una.'),
 (149, 'Loperamida', 'Racecadotrilo', 'PRECAUCION', 'Ambos frenan la diarrea: no se necesitan juntos. Lo importante es hidratarse con sales de rehidratación.'),
 (150, 'Loperamida', 'Bisacodilo', 'PRECAUCION', 'Uno frena la diarrea y el otro es laxante: no tiene sentido comprarlos juntos.'),
@@ -1000,7 +952,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (155, 'Dimenhidrinato', 'Clorfenamina', 'PRECAUCION', 'Ambos son antihistamínicos que dan sueño: juntos la somnolencia es intensa. No manejes.'),
 (156, 'Dimenhidrinato', 'Hidroxicina', 'PRECAUCION', 'Ambos dan mucho sueño: juntos la somnolencia es intensa. No manejes.'),
 
--- Sistema nervioso
 (157, 'Carbamazepina', 'Levonorgestrel', 'PELIGRO', 'La carbamazepina le quita efecto a los anticonceptivos hormonales, incluida la pastilla del día siguiente. Usa otro método.'),
 (158, 'Carbamazepina', 'Claritromicina', 'PELIGRO', 'La claritromicina eleva los niveles de carbamazepina y puede causar intoxicación.'),
 (159, 'Carbamazepina', 'Fluconazol', 'PRECAUCION', 'El fluconazol puede elevar los niveles de carbamazepina.'),
@@ -1012,10 +963,6 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (165, 'Tramadol', 'Pregabalina', 'PRECAUCION', 'Juntos aumentan el sueño y pueden deprimir la respiración.'),
 (166, 'Tramadol', 'Gabapentina', 'PRECAUCION', 'Juntos aumentan el sueño y pueden deprimir la respiración.');
 
-
--- =====================================================================================
--- Corticoides e inmunosupresores
--- =====================================================================================
 INSERT OR REPLACE INTO medicamentos
 (id, nombre, principio_activo, categoria, concentracion, dosis_mg, dosis_max_unidad_mg, dosis_max_diaria_mg,
  unidades_dia_habitual, dosis_sugerida, momento_comida, requiere_receta, descripcion, consejos)
@@ -1037,7 +984,6 @@ VALUES
  'Inmunosupresor para artritis reumatoide, psoriasis y algunas enfermedades autoinmunes.',
  'Tomarlo a diario por error puede ser mortal. Evita antiinflamatorios, aspirina y cotrimoxazol: aumentan su toxicidad. El médico suele indicar ácido fólico y análisis de sangre periódicos. No en el embarazo.');
 
-
 INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo, explicacion) VALUES
 (167, 'Grupo: Corticoide', 'Grupo: Corticoide', 'PELIGRO', 'Son dos corticoides: juntos suman efectos adversos (azúcar alta, presión alta, defensas bajas, úlcera). Basta con uno, es una venta redundante.'),
 (168, 'Betametasona', 'Ketorolaco', 'PELIGRO', 'Corticoide más ketorolaco tiene un riesgo muy alto de úlcera y sangrado digestivo. Esta combinación no debería venderse sin receta.'),
@@ -1048,3 +994,116 @@ INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo
 (173, 'Metotrexato', 'Sulfametoxazol', 'PELIGRO', 'El cotrimoxazol con metotrexato puede causar una caída grave de las defensas y de las células de la sangre. Combinación peligrosa.'),
 (174, 'Metotrexato', 'Omeprazol', 'PRECAUCION', 'El omeprazol puede elevar los niveles de metotrexato, sobre todo en dosis altas. Avisa a tu médico.'),
 (175, 'Metotrexato', 'Grupo: Corticoide', 'PRECAUCION', 'Se usan juntos en algunas enfermedades autoinmunes, pero suman el riesgo de infecciones. Solo con control médico.');
+
+INSERT OR REPLACE INTO medicamentos
+(id, nombre, principio_activo, categoria, concentracion, dosis_mg, dosis_max_unidad_mg, dosis_max_diaria_mg,
+ unidades_dia_habitual, dosis_sugerida, momento_comida, requiere_receta, descripcion, consejos)
+VALUES
+(185, 'Dr. Flu', 'Paracetamol + Fenilefrina + Clorfenamina + Dextrometorfano', 'Antigripal', 'Cápsula blanda', NULL, NULL, NULL, 3,
+ 'Según el empaque, habitualmente 1 cápsula cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal con cuatro componentes: paracetamol (dolor y fiebre), fenilefrina (descongestiona la nariz), clorfenamina (estornudos y moqueo) y dextrometorfano (tos seca). Alivia síntomas, no cura el resfrío. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol y clorfenamina: no tomes paracetamol, Panadol ni otro antigripal aparte. Da sueño, no manejes. Evítalo si tienes presión alta o tomas antidepresivos. No lo uses si la tos tiene flema.'),
+(186, 'Vitapyrena Forte', 'Paracetamol + Fenilefrina', 'Antigripal', 'Sobre (paracetamol 500 mg / fenilefrina 10 mg)', 500, 1000, 4000, 3,
+ '1 sobre disuelto en agua caliente cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal en polvo para preparar una bebida caliente: paracetamol para el dolor y la fiebre y fenilefrina para la congestión nasal. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol: no lo combines con Panadol ni con otro antigripal. Si tienes presión alta consulta antes de usarlo.'),
+(187, 'Panadol Extra', 'Paracetamol + Cafeína', 'Analgésico y antipirético', '500 / 65 mg tableta', 500, 1000, 4000, 3,
+ '1 a 2 tabletas cada 6 a 8 horas. Máximo 8 tabletas al día.', 'INDIFERENTE', 0,
+ 'Paracetamol con cafeína, que refuerza el efecto contra el dolor de cabeza. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol: no tomes paracetamol ni Panadol aparte. Evita el café o bebidas energéticas mientras lo tomas y no lo tomes de noche si te quita el sueño.'),
+(188, 'Buscapina Compositum N', 'Paracetamol + Butilhioscina', 'Antiespasmódico', '500 / 10 mg tableta', 500, 1000, 4000, 3,
+ '1 a 2 tabletas cada 8 horas.', 'INDIFERENTE', 0,
+ 'Combina butilhioscina (calma los cólicos) y paracetamol (calma el dolor) para cólicos abdominales y menstruales. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol y butilhioscina: no tomes Buscapina ni paracetamol aparte. Si el dolor abdominal es intenso o con fiebre acude al médico.'),
+(189, 'Augmentin', 'Amoxicilina + Ácido clavulánico', 'Antibiótico', '875 / 125 mg tableta', 875, 875, 1750, 2,
+ 'Según receta, 1 tableta cada 12 horas.', 'DURANTE', 1,
+ 'Marca comercial de amoxicilina con ácido clavulánico, para infecciones resistentes. Composición referencial, verifica el empaque.',
+ 'Ya contiene amoxicilina: no la tomes con otra amoxicilina. Tómala al inicio de las comidas. Puede dar diarrea.'),
+(190, 'Bactrim Forte', 'Sulfametoxazol + Trimetoprima', 'Antibiótico', '800 / 160 mg tableta', 800, 800, 1600, 2,
+ 'Según receta, 1 tableta cada 12 horas.', 'DESPUES', 1,
+ 'Marca comercial de cotrimoxazol (sulfametoxazol con trimetoprima) para infecciones urinarias y algunas diarreas bacterianas.',
+ 'Es lo mismo que el cotrimoxazol genérico. Toma bastante agua. Suspéndelo si aparecen ronchas o ampollas en la piel.'),
+(191, 'Glucovance', 'Metformina + Glibenclamida', 'Antidiabético', '500 / 5 mg tableta', 500, 1000, 2550, 2,
+ 'Según receta, con el desayuno y la cena.', 'DURANTE', 1,
+ 'Marca comercial que combina metformina y glibenclamida para la diabetes tipo 2. Composición referencial, verifica el empaque.',
+ 'Ya contiene ambos: no los tomes además por separado. No te saltes comidas, puede bajar demasiado el azúcar.'),
+(192, 'Hyzaar', 'Losartán + Hidroclorotiazida', 'Antihipertensivo', '50 / 12.5 mg tableta', 50, 100, 100, 1,
+ 'Según receta, 1 tableta en la mañana.', 'INDIFERENTE', 1,
+ 'Marca comercial que combina losartán y un diurético para la presión arterial. Composición referencial, verifica el empaque.',
+ 'Ya contiene losartán: no lo tomes junto con losartán solo.'),
+(193, 'Microgynon', 'Levonorgestrel + Etinilestradiol', 'Anticonceptivo', 'Tableta (ciclo de 21 o 28)', NULL, NULL, NULL, 1,
+ '1 tableta al día a la misma hora.', 'INDIFERENTE', 0,
+ 'Marca comercial de pastilla anticonceptiva combinada de uso diario. Composición referencial, verifica el empaque.',
+ 'Es equivalente a otros anticonceptivos con levonorgestrel y etinilestradiol: no tomes dos a la vez. Algunos medicamentos como la carbamazepina le quitan efecto.'),
+(194, 'Sal de Fruta Eno', 'Bicarbonato de sodio + Ácido cítrico', 'Malestar estomacal', 'Polvo efervescente (sobre)', NULL, NULL, NULL, 1,
+ '1 sobre disuelto en agua cuando haya acidez o llenura. No más de 3 al día.', 'DESPUES', 0,
+ 'Antiácido efervescente para la acidez y la indigestión. Composición referencial, verifica el empaque.',
+ 'Es lo mismo que la Sal de Andrews: basta con uno. Contiene mucho sodio, evítalo si tienes presión alta o problemas del corazón o riñón.');
+
+INSERT OR REPLACE INTO medicamentos
+(id, nombre, principio_activo, categoria, concentracion, dosis_mg, dosis_max_unidad_mg, dosis_max_diaria_mg,
+ unidades_dia_habitual, dosis_sugerida, momento_comida, requiere_receta, descripcion, consejos)
+VALUES
+(195, 'Abubron BR', 'Amoxicilina + Bromhexina', 'Antibiótico', 'Cápsula (amoxicilina 500 mg / bromhexina 8 mg)', 500, 1000, 3000, 3,
+ 'Según receta. Habitualmente 1 cápsula cada 8 horas.', 'INDIFERENTE', 1,
+ 'Antibiótico (amoxicilina) con un expectorante (bromhexina) para infecciones de los bronquios con flema. No sirve para gripes ni resfríos causados por virus. Composición referencial, verifica el empaque.',
+ 'Ya contiene amoxicilina y bromhexina: no tomes además amoxicilina ni bromhexina por separado. Cumple todo el tratamiento. Si eres alérgico a la penicilina no debes tomarlo.'),
+(196, 'Comtrex Antigripal Día', 'Paracetamol + Guaifenesina + Fenilefrina', 'Antigripal', 'Sobre (paracetamol 500 mg / guaifenesina 200 mg / fenilefrina 10 mg)', 500, 1000, 4000, 3,
+ 'Según el empaque, 1 sobre disuelto en agua cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal de día sin antialérgico: paracetamol (dolor y fiebre), guaifenesina (afloja la flema) y fenilefrina (descongestiona la nariz). Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol: no tomes paracetamol ni otro antigripal aparte. No lo uses si tienes presión alta o enfermedad del corazón. Para tos con flema, no para tos seca.'),
+(197, 'Pharamol Antigripal', 'Paracetamol + Fenilefrina + Clorfenamina', 'Antigripal', 'Tableta (paracetamol 500 mg / fenilefrina 5 mg / clorfenamina 2 mg)', 500, 1000, 4000, 3,
+ 'Según el empaque, 1 tableta cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal con paracetamol, un descongestionante (fenilefrina) y un antialérgico (clorfenamina). Alivia síntomas del resfrío, no lo cura. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol y clorfenamina: no tomes Panadol ni otro antigripal aparte. Puede dar sueño. Si tienes presión alta consulta antes.'),
+(198, 'Antigripina Plus', 'Paracetamol + Fenilefrina + Clorfenamina', 'Antigripal', 'Tableta (paracetamol 500 mg / fenilefrina 5 mg / clorfenamina 2 mg)', 500, 1000, 4000, 3,
+ 'Según el empaque, 1 tableta cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal con paracetamol, fenilefrina (nariz tapada) y clorfenamina (estornudos y moqueo). Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol y clorfenamina: no lo combines con otro antigripal ni con paracetamol. Puede dar sueño. Si tienes presión alta consulta antes.'),
+(199, 'Tapsin Plus Caliente Noche', 'Paracetamol + Dextrometorfano + Clorfenamina', 'Antigripal', 'Sobre (paracetamol 650 mg)', 650, 1000, 4000, 1,
+ 'Según el empaque, 1 sobre disuelto en agua caliente en la noche.', 'INDIFERENTE', 0,
+ 'Antigripal de noche en bebida caliente: paracetamol (dolor y fiebre), dextrometorfano (tos seca) y clorfenamina (moqueo, ayuda a dormir). Composición referencial, verifica el empaque.',
+ 'Da sueño: no manejes. Ya contiene paracetamol: no tomes otro antigripal ni paracetamol aparte. No lo combines con antidepresivos ni lo uses si la tos tiene flema.'),
+(200, 'Gripamedic N', 'Paracetamol + Clorfenamina + Dextrometorfano + Fenilefrina', 'Antigripal', 'Tableta recubierta', NULL, NULL, NULL, 3,
+ 'Según el empaque, habitualmente 1 tableta cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal con cuatro componentes: paracetamol, clorfenamina, dextrometorfano y fenilefrina. Alivia síntomas del resfrío, no lo cura. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol y clorfenamina: no tomes otro antigripal ni paracetamol aparte. Da sueño. Evítalo si tienes presión alta o tomas antidepresivos.'),
+(201, 'Gripaliv NF', 'Paracetamol + Clorfenamina + Dextrometorfano + Fenilefrina', 'Antigripal', 'Tableta recubierta', NULL, NULL, NULL, 3,
+ 'Según el empaque, habitualmente 1 tableta cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal con paracetamol, clorfenamina, dextrometorfano y fenilefrina. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol y clorfenamina: no tomes otro antigripal ni paracetamol aparte. Da sueño. Evítalo si tienes presión alta o tomas antidepresivos.'),
+(202, 'Resfrigrip Antigripal', 'Paracetamol + Clorfenamina + Dextrometorfano + Fenilefrina', 'Antigripal', 'Tableta recubierta', NULL, NULL, NULL, 3,
+ 'Según el empaque, habitualmente 1 tableta cada 8 horas, máximo 5 días.', 'INDIFERENTE', 0,
+ 'Antigripal con paracetamol, clorfenamina, dextrometorfano y fenilefrina. Composición referencial, verifica el empaque.',
+ 'Ya contiene paracetamol y clorfenamina: no tomes otro antigripal ni paracetamol aparte. Da sueño. Evítalo si tienes presión alta o tomas antidepresivos.'),
+(203, 'Panadol Gripe Noche', 'Paracetamol + Clorfenamina + Fenilefrina', 'Antigripal', 'Tableta (paracetamol 500 mg)', 500, 1000, 4000, 1,
+ 'Según el empaque, en la noche.', 'INDIFERENTE', 0,
+ 'Antigripal de noche: paracetamol (dolor y fiebre), clorfenamina (moqueo, da sueño) y fenilefrina (nariz tapada). Composición referencial, verifica el empaque.',
+ 'Da sueño: no manejes. Ya contiene paracetamol: no tomes Panadol ni otro antigripal aparte. Si tienes presión alta consulta antes.'),
+(204, 'Midol Extra Fuerte', 'Ibuprofeno + Paracetamol', 'Antiinflamatorio (AINE)', 'Tableta recubierta 500 mg + 200 mg', NULL, NULL, NULL, 3,
+ 'Según el empaque, 1 tableta cada 8 horas.', 'DESPUES', 0,
+ 'Combina ibuprofeno (desinflama) y paracetamol (dolor y fiebre), usado para cólicos menstruales y dolores. Composición referencial, verifica el empaque.',
+ 'Ya contiene ibuprofeno y paracetamol: no los tomes además por separado ni con otro antiinflamatorio. Tómalo después de comer. Evítalo con gastritis, úlcera, dengue o anticoagulantes.'),
+(205, 'Dolomax Plus', 'Ibuprofeno + Paracetamol', 'Antiinflamatorio (AINE)', 'Tableta (ibuprofeno 200 mg / paracetamol 500 mg)', 200, 400, 1200, 3,
+ 'Según el empaque, 1 tableta cada 8 horas.', 'DESPUES', 0,
+ 'Combina ibuprofeno 200 mg (desinflama) y paracetamol 500 mg (dolor y fiebre). Composición referencial, verifica el empaque.',
+ 'Ya contiene ibuprofeno y paracetamol: no los tomes además por separado ni con otro antiinflamatorio. Tómalo después de comer. Evítalo con gastritis, úlcera, dengue o anticoagulantes.'),
+(206, 'Neurodioxaflex', 'Diclofenaco + Vitamina B1 + Vitamina B6 + Vitamina B12', 'Antiinflamatorio (AINE)', 'Cápsula (diclofenaco 50 mg + vitaminas B1, B6 y B12)', 50, 50, 150, 3,
+ 'Según receta, 1 cápsula cada 8 horas después de comer.', 'DESPUES', 1,
+ 'Antiinflamatorio (diclofenaco) con vitaminas B1, B6 y B12, para dolor de espalda, nervios y articulaciones. Composición referencial, verifica el empaque.',
+ 'Ya contiene diclofenaco: no lo combines con otro antiinflamatorio ni con Dolo-Neurobión. Tómalo con comida. Evítalo si tienes gastritis, úlcera o problemas de riñón.'),
+(207, 'Gaseovet MS', 'Magaldrato + Simeticona', 'Malestar estomacal', 'Tableta masticable (magaldrato 800 mg / simeticona 40 mg)', NULL, NULL, NULL, 3,
+ 'Según el empaque, 1 tableta masticada después de las comidas.', 'DESPUES', 0,
+ 'Antiácido (magaldrato) con simeticona para la acidez, la indigestión y los gases. Composición referencial, verifica el empaque.',
+ 'Sepáralo al menos 2 a 4 horas de antibióticos como ciprofloxacino o doxiciclina y de la levotiroxina. Si la acidez es frecuente consulta al médico.'),
+(208, 'Diovan HCT', 'Valsartán + Hidroclorotiazida', 'Antihipertensivo', 'Tableta (valsartán 160 mg / hidroclorotiazida 12.5 o 25 mg)', 160, 320, 320, 1,
+ 'Según receta, 1 tableta al día.', 'INDIFERENTE', 1,
+ 'Combina valsartán y un diurético (hidroclorotiazida) para controlar la presión arterial. Composición referencial, verifica el empaque.',
+ 'Ya contiene valsartán e hidroclorotiazida: no los tomes además por separado. No lo combines con losartán ni enalapril. Los antiinflamatorios le quitan efecto.');
+
+INSERT OR REPLACE INTO interacciones (id, principio_a, principio_b, nivel_riesgo, explicacion) VALUES
+(176, 'Ciprofloxacino', 'Magaldrato', 'PRECAUCION', 'Los antiácidos reducen la absorción del ciprofloxacino. Toma el antibiótico 2 horas antes o 6 horas después.'),
+(177, 'Levofloxacino', 'Magaldrato', 'PRECAUCION', 'Los antiácidos reducen la absorción del levofloxacino. Sepáralos al menos 2 horas.'),
+(178, 'Doxiciclina', 'Magaldrato', 'PRECAUCION', 'Los antiácidos reducen la absorción de la doxiciclina. Sepáralos al menos 3 horas.'),
+(179, 'Levotiroxina', 'Magaldrato', 'PRECAUCION', 'Los antiácidos reducen la absorción de la levotiroxina. Sepáralos al menos 4 horas.'),
+(180, 'Sulfato ferroso', 'Magaldrato', 'PRECAUCION', 'Los antiácidos reducen la absorción del hierro. Sepáralos al menos 2 horas.');

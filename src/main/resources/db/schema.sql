@@ -1,18 +1,11 @@
--- FarmaGuard - estructura de la base de datos SQLite
--- Importante: Spring separa las sentencias por punto y coma, no usar ";" dentro de textos.
-
 CREATE TABLE IF NOT EXISTS medicamentos (
     id                    INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre                TEXT    NOT NULL UNIQUE,
-    -- Uno o varios principios activos separados por "+" (ej. "Paracetamol + Clorfenamina")
     principio_activo      TEXT    NOT NULL,
     categoria             TEXT    NOT NULL,
     concentracion         TEXT,
-    -- mg del primer principio activo por unidad (tableta, cápsula, sobre)
     dosis_mg              REAL,
-    -- máximo recomendado por unidad sin receta (si dosis_mg lo supera se avisa "concentración alta")
     dosis_max_unidad_mg   REAL,
-    -- máximo diario del primer principio activo para un adulto
     dosis_max_diaria_mg   REAL,
     unidades_dia_habitual INTEGER NOT NULL DEFAULT 1,
     dosis_sugerida        TEXT,
@@ -25,8 +18,6 @@ CREATE TABLE IF NOT EXISTS medicamentos (
 
 CREATE INDEX IF NOT EXISTS idx_medicamentos_principio ON medicamentos (principio_activo);
 
--- Las interacciones se definen entre principios activos (no entre marcas),
--- así una regla "Ibuprofeno + Naproxeno" cubre también Advil + Apronax.
 CREATE TABLE IF NOT EXISTS interacciones (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     principio_a  TEXT NOT NULL,
@@ -41,12 +32,12 @@ CREATE TABLE IF NOT EXISTS recordatorios (
     medicamento      TEXT    NOT NULL,
     frecuencia_horas INTEGER NOT NULL CHECK (frecuencia_horas BETWEEN 1 AND 24),
     duracion_dias    INTEGER NOT NULL CHECK (duracion_dias BETWEEN 1 AND 365),
-    -- cada cuántos días se repite: 1 = diario, 7 = una vez por semana (ej. metotrexato)
     intervalo_dias   INTEGER NOT NULL DEFAULT 1 CHECK (intervalo_dias BETWEEN 1 AND 30),
     momento_comida   TEXT    NOT NULL DEFAULT 'INDIFERENTE'
                      CHECK (momento_comida IN ('ANTES', 'DURANTE', 'DESPUES', 'INDIFERENTE')),
-    hora_inicio      TEXT    NOT NULL, -- HH:mm
-    fecha_inicio     TEXT    NOT NULL, -- yyyy-MM-dd
+    hora_inicio      TEXT    NOT NULL,
+    fecha_inicio     TEXT    NOT NULL,
     notas            TEXT,
+    horas_fijas      TEXT,
     activo           INTEGER NOT NULL DEFAULT 1
 );

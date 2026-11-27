@@ -4,7 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import pe.farmaguard.model.NivelRiesgo;
+import pe.farmaguard.model.NivelRiesgoYberia;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -26,22 +26,21 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
-public final class Estilos {
-
-    public static final int ARC = 12;
-    public static final String AVISO_LEGAL = "FarmaGuard es una guía de compra informada. No diagnostica ni reemplaza "
+public final class EstilosYberia {
+    public static final int ARC_YBERIA = 12;
+    public static final String AVISO_LEGAL_YBERIA = "FarmaGuard es una guía de compra informada. No diagnostica ni reemplaza "
             + "la consulta con un médico o químico farmacéutico.";
 
-    private static final Preferences PREFERENCIAS = Preferences.userNodeForPackage(Estilos.class);
-    private static final String CLAVE_TEMA_OSCURO = "temaOscuro";
+    private static final Preferences PREFERENCIAS_YBERIA = Preferences.userNodeForPackage(EstilosYberia.class);
+    private static final String CLAVE_TEMA_OSCURO_YBERIA = "temaOscuro";
 
-    private Estilos() {
+    private EstilosYberia() {
     }
 
     public static void instalarTema() {
         boolean oscuro;
         try {
-            oscuro = PREFERENCIAS.getBoolean(CLAVE_TEMA_OSCURO, false);
+            oscuro = PREFERENCIAS_YBERIA.getBoolean(CLAVE_TEMA_OSCURO_YBERIA, false);
         } catch (RuntimeException e) {
             oscuro = false;
         }
@@ -52,7 +51,7 @@ public final class Estilos {
         boolean oscuro = !esOscuro();
         aplicarTema(oscuro);
         try {
-            PREFERENCIAS.putBoolean(CLAVE_TEMA_OSCURO, oscuro);
+            PREFERENCIAS_YBERIA.putBoolean(CLAVE_TEMA_OSCURO_YBERIA, oscuro);
         } catch (RuntimeException ignorada) {
         }
         FlatLaf.updateUI();
@@ -74,9 +73,9 @@ public final class Estilos {
         if (base != null) {
             UIManager.put("defaultFont", base.deriveFont(base.getSize2D() + 1f));
         }
-        UIManager.put("Component.arc", ARC);
-        UIManager.put("Button.arc", ARC);
-        UIManager.put("TextComponent.arc", ARC);
+        UIManager.put("Component.arc", ARC_YBERIA);
+        UIManager.put("Button.arc", ARC_YBERIA);
+        UIManager.put("TextComponent.arc", ARC_YBERIA);
         UIManager.put("ScrollBar.thumbArc", 999);
         UIManager.put("ScrollBar.thumbInsets", new Insets(2, 2, 2, 2));
         UIManager.put("ScrollBar.width", 10);
@@ -115,7 +114,7 @@ public final class Estilos {
         return color(0xE3F3F1, 0x1E3B39);
     }
 
-    public static Color fondoNivel(NivelRiesgo nivel) {
+    public static Color fondoNivel(NivelRiesgoYberia nivel) {
         return switch (nivel) {
             case SEGURO -> color(0xEAF7EF, 0x1F3A2C);
             case PRECAUCION -> color(0xFFF7E1, 0x3B3220);
@@ -123,7 +122,7 @@ public final class Estilos {
         };
     }
 
-    public static Color colorNivel(NivelRiesgo nivel) {
+    public static Color colorNivel(NivelRiesgoYberia nivel) {
         return switch (nivel) {
             case SEGURO -> color(0x2F9E62, 0x4CC38A);
             case PRECAUCION -> color(0xE3A008, 0xF2C14E);
@@ -131,7 +130,7 @@ public final class Estilos {
         };
     }
 
-    public static Color textoNivel(NivelRiesgo nivel) {
+    public static Color textoNivel(NivelRiesgoYberia nivel) {
         return switch (nivel) {
             case SEGURO -> color(0x1E6B42, 0xA7E8C6);
             case PRECAUCION -> color(0x8A5A00, 0xF7D98B);

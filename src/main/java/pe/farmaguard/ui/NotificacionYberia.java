@@ -14,11 +14,10 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
 
-final class Notificacion {
+final class NotificacionYberia {
+    private static final int DURACION_MS_YBERIA = 120_000;
 
-    private static final int DURACION_MS = 120_000;
-
-    private Notificacion() {
+    private NotificacionYberia() {
     }
 
     static void mostrar(Window duenio, String encabezado, String titulo, String detalle) {
@@ -34,26 +33,26 @@ final class Notificacion {
             dialogo.setBackground(new Color(0, 0, 0, 0));
         }
 
-        Tarjeta tarjeta = new Tarjeta(new BorderLayout(14, 0));
-        JPanel columnaIcono = Estilos.transparente(new BorderLayout());
-        columnaIcono.add(new JLabel(Iconos.reloj(30)), BorderLayout.NORTH);
+        TarjetaYberia tarjeta = new TarjetaYberia(new BorderLayout(14, 0));
+        JPanel columnaIcono = EstilosYberia.transparente(new BorderLayout());
+        columnaIcono.add(new JLabel(IconosYberia.reloj(30)), BorderLayout.NORTH);
         tarjeta.add(columnaIcono, BorderLayout.WEST);
 
-        PanelVertical columna = new PanelVertical();
-        columna.agregar(Estilos.etiqueta(encabezado, "small", Estilos::textoSecundario));
+        PanelVerticalYberia columna = new PanelVerticalYberia();
+        columna.agregar(EstilosYberia.etiqueta(encabezado, "small", EstilosYberia::textoSecundario));
         columna.espacio(2);
-        columna.agregar(Estilos.etiqueta(titulo, "h3"));
+        columna.agregar(EstilosYberia.etiqueta(titulo, "h3"));
         columna.espacio(2);
-        columna.agregar(Estilos.parrafo(detalle, Estilos::textoPrincipal));
+        columna.agregar(EstilosYberia.parrafo(detalle, EstilosYberia::textoPrincipal));
         columna.espacio(12);
-        BotonPrimario entendido = new BotonPrimario("Entendido", null);
+        BotonPrimarioYberia entendido = new BotonPrimarioYberia("Entendido", null);
         entendido.addActionListener(e -> dialogo.dispose());
-        JPanel filaBoton = Estilos.transparente(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        JPanel filaBoton = EstilosYberia.transparente(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         filaBoton.add(entendido);
         columna.agregar(filaBoton);
         tarjeta.add(columna, BorderLayout.CENTER);
 
-        JPanel raiz = Estilos.transparente(new BorderLayout());
+        JPanel raiz = EstilosYberia.transparente(new BorderLayout());
         raiz.add(tarjeta);
         dialogo.setContentPane(raiz);
         dialogo.pack();
@@ -70,7 +69,7 @@ final class Notificacion {
                 area.y + area.height - dialogo.getHeight() - 16);
         dialogo.setVisible(true);
 
-        Timer cierre = new Timer(DURACION_MS, e -> dialogo.dispose());
+        Timer cierre = new Timer(DURACION_MS_YBERIA, e -> dialogo.dispose());
         cierre.setRepeats(false);
         cierre.start();
     }
