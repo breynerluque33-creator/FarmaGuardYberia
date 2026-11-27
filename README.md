@@ -9,7 +9,14 @@
 - **Dosis diaria excesiva** al sumar varios productos.
 - **Productos que requieren receta**, muy concentrados o innecesarios.
 
-Además tiene un **catálogo** de más de 180 medicamentos comunes en boticas del Perú (para qué sirve cada uno, cómo se toma y consejos) y **recordatorios** que te avisan a la hora de cada toma.
+Además tiene un **catálogo** de más de 200 medicamentos comunes en boticas del Perú (para qué sirve cada uno, cómo se toma y consejos), más de **100 marcas comerciales** reconocidas y **recordatorios** que te avisan a la hora de cada toma.
+
+### Novedades de la versión 1.1.0
+- **Sinónimos:** *clorfenamina*, *clorfeniramina* y *maleato de clorfeniramina* se reconocen como el mismo principio activo (igual con acetaminofén = paracetamol, dipirona = metamizol y muchos más).
+- **Más de 100 marcas del Perú:** las marcas con varios componentes (Dr. Flu, Abubron BR, Comtrex, Tapsin, Midol, Dolomax Plus…) muestran todos sus componentes de una vez.
+- **Guía de uso** que aparece la primera vez que abres el programa y **aviso importante** (botón **i**).
+- **Recordatorios más limpios:** la pestaña muestra solo tu agenda y el formulario se abre con **Nuevo recordatorio**. Las tomas se ponen junto a las comidas cuando el medicamento va antes, durante o después de comer.
+- **Análisis más preciso** en recetas grandes: menos falsos positivos y una sola alerta por componente repetido.
 
 > 📱 ¿Lo quieres en el celular? Mira la versión para Android: [FarmaGuardYberia-Android](https://github.com/breynerluque33-creator/FarmaGuardYberia-Android)
 
